@@ -1,0 +1,155 @@
+name: Build Windows Packages
+
+on:
+  push:
+    tags:
+      - "v*"
+    branches:
+      - main
+  workflow_dispatch:  # Allow manual trigger from GitHub UI
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          uv sync
+          uv pip install pyinstaller
+
+      - name: Download VC++ Redistributable
+        run: |
+          Invoke-WebRequest -Uri "https://aka.ms/vs/17/release/vc_redist.x64.exe" -OutFile "resources/vc_redist.x64.exe"
+        shell: pwsh
+
+      - name: Prepare bundled Python with pythonnet
+        run: .\scripts\prepare-python-embed.ps1
+        shell: pwsh
+
+      - name: Build customer app bundle
+        shell: pwsh
+        run: |
+          $args = @(
+            "--name", "tekla-nest",
+            "--onedir",
+            "--windowed",
+            "--icon", "resources/logo_cut_bar_mark.ico",
+            "--version-file", "resources/version_info.txt",
+            "--add-data", "config.yaml;.",
+            "--add-data", "resources;resources",
+            "--distpath", "dist"
+          )
+          if (Test-Path "src/tekla_nest/licensing/public_key.pem") {
+            $args += @("--add-data", "src/tekla_nest/licensing/public_key.pem;tekla_nest/licensing")
+          }
+          $args += "src/tekla_nest/__main__.py"
+          uv run pyinstaller @args
+
+      - name: Build admin app bundle
+        shell: pwsh
+        run: |
+          uv run pyinstaller `
+            --name tekla-nest-admin `
+            --onedir `
+            --windowed `
+            --icon "resources/logo_cut_bar_mark.ico" `
+            --version-file "resources/version_info.txt" `
+            --add-data "config.yaml;." `
+            --add-data "resources;resources" `
+            --distpath dist `
+            src/tekla_nest/admin/__main__.py
+
+      - name: Smoke-test desktop executables
+        run: |
+          function Test-AppStart($Path, $Name) {
+            $proc = Start-Process -FilePath $Path -PassThru
+            Start-Sleep -Seconds 5
+            if ($proc.HasExited -and $proc.ExitCode -ne 0) {
+              Write-Error "$Name crashed on startup with exit code $($proc.ExitCode)"
+              exit 1
+            }
+            if (!$proc.HasExited) {
+              $proc.Kill()
+              Write-Host "$Name started successfully — smoke test passed."
+            }
+          }
+          Test-AppStart "dist\tekla-nest\tekla-nest.exe" "Tekla Nest"
+          Test-AppStart "dist\tekla-nest-admin\tekla-nest-admin.exe" "Tekla Nest Admin"
+        shell: pwsh
+        timeout-minutes: 2
+
+      - name: Debug path
+        run: Get-ChildItem -Recurse -Path dist | Format-List FullName
+        shell: pwsh
+
+      - name: Build customer installer
+        run: iscc installer.iss
+
+      - name: Build admin installer
+        run: iscc installer-admin.iss
+
+      - name: Package license-server infrastructure separately
+        shell: pwsh
+        run: |
+          $infraRoot = "dist\license-server-infrastructure"
+          if (Test-Path $infraRoot) {
+            Remove-Item -Recurse -Force $infraRoot
+          }
+          New-Item -ItemType Directory -Path $infraRoot | Out-Null
+          Copy-Item -Recurse -Path "license-server" -Destination $infraRoot
+          Remove-Item -Recurse -Force "$infraRoot\license-server\functions\venv" -ErrorAction SilentlyContinue
+          Remove-Item -Recurse -Force "$infraRoot\license-server\keys" -ErrorAction SilentlyContinue
+          Remove-Item -Recurse -Force "$infraRoot\license-server\.firebase" -ErrorAction SilentlyContinue
+          Compress-Archive `
+            -Path "$infraRoot\license-server" `
+            -DestinationPath "dist\tekla-nest-license-server-infrastructure.zip" `
+            -Force
+
+      - name: Upload customer installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tekla-nest-installer
+          path: dist/tekla-nest-setup.exe
+
+      - name: Upload admin installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tekla-nest-admin-installer
+          path: dist/tekla-nest-admin-setup.exe
+
+      - name: Upload customer standalone artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tekla-nest-standalone
+          path: dist/tekla-nest/
+
+      - name: Upload admin standalone artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tekla-nest-admin-standalone
+          path: dist/tekla-nest-admin/
+
+      - name: Upload infrastructure artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tekla-nest-license-server-infrastructure
+          path: dist/tekla-nest-license-server-infrastructure.zip
+
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/tekla-nest-setup.exe
+            dist/tekla-nest-admin-setup.exe
+            dist/tekla-nest-license-server-infrastructure.zip

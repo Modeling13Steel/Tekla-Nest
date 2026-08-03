@@ -1,0 +1,5 @@
+# Licensing-module dependencies
+# (cryptography is already in the main project's pyproject.toml)
+cryptography>=41.0
+httpx>=0.24
+wmi>=1.5; sys_platform == "win32"

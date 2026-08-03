@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Foundations - spec-0001</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="prototype-screen">
+  <a class="skip-link" href="#main">Skip to prototype content</a>
+  <div class="screen-frame" aria-label="Tekla Nest prototype shell">
+    <header class="app-chrome">
+      <nav class="menu-bar" aria-label="Application menu">
+        <a href="./prototype-toolbar-status.html">File</a>
+        <a href="./prototype-data-table-system.html">Stock</a>
+        <a href="./prototype-representative-shell.html">Nesting</a>
+        <a href="./prototype-forms-dialogs.html">View</a>
+      </nav>
+      <div class="toolbar" role="toolbar" aria-label="Primary actions">
+        <div class="brand-mark" aria-hidden="true">TN</div>
+        <p class="app-title">M13S Nest</p>
+        <div class="toolbar-actions">
+          <a class="button button-secondary" href="./prototype-data-table-system.html">Load Parts</a>
+          <a class="button button-primary" href="./prototype-representative-shell.html">Calculate</a>
+          <a class="button button-secondary" href="./prototype-toolbar-status.html">Export</a>
+        </div>
+      </div>
+    </header>
+    <main id="main" class="app-main">
+      <section class="board-frame" aria-labelledby="foundation-title">
+        <div class="board-intro">
+          <p class="prototype-index__eyebrow">F01 - Foundations</p>
+          <h1 id="foundation-title">Foundation tokens</h1>
+          <p>Status roles are semantic, not brand colors. This prototype uses the selected modern SaaS/data-product palette while Tekla palette adoption remains a production follow-up.</p>
+        </div>
+
+        <section class="panel" aria-labelledby="color-heading">
+          <h2 id="color-heading">Color roles</h2>
+          <div class="swatch-grid">
+            <div><span class="swatch swatch-primary" aria-hidden="true"></span><strong>color.action.primary</strong><p>#1d4ed8 for primary actions and selected emphasis.</p></div>
+            <div><span class="swatch swatch-accent" aria-hidden="true"></span><strong>color.action.accent</strong><p>#0f766e for restrained teal emphasis.</p></div>
+            <div><span class="swatch swatch-bg" aria-hidden="true"></span><strong>color.bg.app</strong><p>#f6f8fb application background.</p></div>
+            <div><span class="swatch swatch-surface" aria-hidden="true"></span><strong>color.bg.surface</strong><p>#ffffff panels, inputs, dialogs, and tables.</p></div>
+            <div><span class="swatch swatch-success" aria-hidden="true"></span><strong>success</strong><p>Semantic role paired with text and status label.</p></div>
+            <div><span class="swatch swatch-warning" aria-hidden="true"></span><strong>warning</strong><p>Partial result and recoverable warning role.</p></div>
+            <div><span class="swatch swatch-danger" aria-hidden="true"></span><strong>danger</strong><p>Error and destructive-action role.</p></div>
+            <div><span class="swatch swatch-info" aria-hidden="true"></span><strong>info</strong><p>Progress and neutral information role.</p></div>
+          </div>
+        </section>
+
+        <section class="grid-3" aria-label="Typography spacing and focus">
+          <div class="component-card">
+            <h2>Typography</h2>
+            <p class="type-title">Major page title</p>
+            <p class="type-heading">Section heading</p>
+            <p class="type-body">Body text uses Segoe UI with readable desktop density.</p>
+            <p class="type-helper">Helper text is lower contrast but remains legible.</p>
+            <p class="type-error">Validation message: Enter a valid positive number.</p>
+          </div>
+          <div class="component-card">
+            <h2>Spacing</h2>
+            <div class="spacing-stack" aria-label="Spacing token examples">
+              <div class="spacing-sample"><span>4px</span><span class="spacing-bar spacing-4"></span></div>
+              <div class="spacing-sample"><span>8px</span><span class="spacing-bar spacing-8"></span></div>
+              <div class="spacing-sample"><span>12px</span><span class="spacing-bar spacing-12"></span></div>
+              <div class="spacing-sample"><span>16px</span><span class="spacing-bar spacing-16"></span></div>
+              <div class="spacing-sample"><span>24px</span><span class="spacing-bar spacing-24"></span></div>
+            </div>
+          </div>
+          <div class="component-card">
+            <h2>Focus and state roles</h2>
+            <ul class="focus-demo-list">
+              <li><a class="button button-primary is-focused" href="./prototype-data-table-system.html">Focused button: Load Parts</a></li>
+              <li><a class="tab tab-active is-focused" href="./prototype-representative-shell.html#market-stock">Focused stock selector-style control: Mercado</a></li>
+              <li><span class="editable-cell is-focused" tabindex="0" role="gridcell" aria-label="Focused editable quantity cell, row B-108, value 0 invalid">Focused editable cell: 0</span></li>
+              <li><a class="report-action is-focused" href="./prototype-representative-shell.html#row-3">Focused report link: Move bar row 3 up</a></li>
+            </ul>
+            <p><span class="badge badge-warning">Warning includes text</span></p>
+            <p>All examples use the same focus ring and must remain visible in Windows High Contrast and high-DPI settings.</p>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="button-states-heading">
+          <h2 id="button-states-heading">Button state variants</h2>
+          <div class="grid-4">
+            <a class="button button-primary" href="./prototype-data-table-system.html">Default</a>
+            <a class="button button-secondary button-hover" href="./prototype-data-table-system.html">Hover</a>
+            <a class="button button-primary button-pressed" href="./prototype-data-table-system.html">Pressed</a>
+            <a class="button button-error-action" href="./prototype-toolbar-status.html">Error after action</a>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="shape-heading">
+          <h2 id="shape-heading">Shape, border, separator, and elevation</h2>
+          <div class="shape-demo-grid">
+            <div class="shape-demo shape-demo-control"><strong>Control radius</strong><p>6px candidate for buttons, inputs, tabs, and table containers.</p></div>
+            <div class="shape-demo shape-demo-dialog"><strong>Dialog radius</strong><p>10px candidate with subtle desktop dialog elevation.</p></div>
+            <div class="shape-demo shape-demo-separator"><strong>Separator</strong><p>1px border role for panel and toolbar separation without excessive boxes.</p></div>
+            <div class="shape-demo shape-demo-elevation"><strong>Subtle elevation</strong><p>Reserved for active dialogs or important floating surfaces only.</p></div>
+          </div>
+        </section>
+      </section>
+    </main>
+    <footer class="status-bar" role="status" aria-live="polite">
+      Ready
+    </footer>
+  </div>
+  <aside class="annotations" aria-labelledby="annotation-heading">
+    <h2 id="annotation-heading">Prototype annotations</h2>
+    <ul class="annotation-list">
+      <li>Related Section 13 IDs: Q-014, Q-018, Q-025.</li>
+      <li>Brand and accent colors are separated from semantic status roles.</li>
+      <li>Research basis: Awwwards clean/minimal/colorful/typography/data-visualization guidance supports restrained color, precise placement, contrast, consistency, and data clarity.</li>
+      <li>Exact Tekla screenshot and palette evidence is still required before production adoption.</li>
+    </ul>
+  </aside>
+</body>
+</html>

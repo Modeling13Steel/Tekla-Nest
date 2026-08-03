@@ -1,0 +1,18 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+keys/
+.firebase/
+firebase-debug.log
+functions/.env
+functions/.env.*
+
+# never ship private keys
+keys/*.pem
+*.dat
+functions/venv/
+.venv/
+**/.terraform/
+*.tfstate
+*.tfstate.*

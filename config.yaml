@@ -1,0 +1,44 @@
+app:
+  title: "M13S Nest"
+  logo: "resources/logo_outline.png"
+  icon: "resources/logo_cut_bar_mark.ico"
+  version: "2.0.0"
+  language: "pt"
+
+theme:
+  primary_color: "#1d4ed8"
+  accent_color: "#0f766e"
+  background: "#f6f8fb"
+  font_family: "Segoe UI, Helvetica Neue, Arial"
+  font_size: 10
+
+report:
+  title: "Plano de Corte"
+  company_name: "M13S"
+  logo: "resources/logo_outline.png"
+  template: "resources/report_template.html"
+  show_material: true
+  show_stock_source: true
+
+nesting:
+  kerf_width: 0
+  scrap_threshold: 2000
+  max_strategies: 6
+
+stock_defaults:
+  hot_rolled_profiles:
+    families: ["HEB", "HEA", "HEM", "IPE", "IPN", "UPN", "UPE"]
+    lengths: [6100, 10100, 12100, 14100, 15100, 16100]
+    default_quantity: 100
+  other_profiles:
+    lengths: [6000, 12000]
+    default_quantity: 100
+  materials: ["S235JR", "S275JR", "S355JR"]
+
+csv:
+  separators: [",", ";"]
+
+licensing:
+   required: true
+   server_url: "https://europe-west1-teklanest-d2699.cloudfunctions.net"
+   revalidation_days: 0

@@ -1,0 +1,37 @@
+[project]
+name = "tekla-nest"
+version = "2.1.0"
+description = "1D cutting optimization for steel bar stock (desktop app)"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "tekla-common",
+    "PySide6>=6.5",
+    "Jinja2>=3.1",
+    "openpyxl>=3.1.5",
+    "PyJWT[crypto]>=2.8",
+    "requests>=2.28",
+    "cryptography>=41.0",
+    "pythonnet>=3.0.3",
+    "Pillow>=9.0",
+]
+
+[project.optional-dependencies]
+tekla = ["pythonnet>=3.0.3; sys_platform == 'win32' and python_version >= '3.11'"]
+
+[project.scripts]
+tekla-nest = "tekla_nest.main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv.sources]
+tekla-common = { workspace = true }
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tekla_nest"]
+
+# Ship the licence public key (verified offline by the app)
+[tool.hatch.build.targets.wheel.force-include]
+"src/tekla_nest/licensing/public_key.pem" = "tekla_nest/licensing/public_key.pem"

@@ -1,0 +1,68 @@
+[project]
+name = "tekla-nest"
+version = "2.1.0"
+description = "1D cutting optimization for steel bar stock"
+readme = "README.md"
+authors = [
+    { name = "Nelson Almeida", email = "nelson.almeida@ctw.bmwgroup.com" }
+]
+requires-python = ">=3.9"
+dependencies = [
+    "PySide6>=6.5",
+    "PyYAML>=6.0",
+    "Jinja2>=3.1",
+    "openpyxl>=3.1.5",
+    "PyJWT[crypto]>=2.8",
+    "requests>=2.28",
+    "cryptography>=41.0",
+    "pythonnet>=3.0.3",
+    "Pillow>=9.0"
+]
+
+[project.optional-dependencies]
+tekla = ["pythonnet>=3.0.3; sys_platform == 'win32' and python_version >= '3.11'"]
+dev = [
+    "pytest>=7",
+    "pytest-qt>=4",
+    "pytest-cov>=5",
+    "ruff>=0.6",
+]
+
+[tool.uv]
+prerelease = "if-necessary-or-explicit"
+
+[project.scripts]
+tekla-nest = "tekla_nest.main:main"
+tekla-nest-admin = "tekla_nest.admin.main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "windows_only: marks tests that require Windows",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = [".venv", "build", "dist", "docs/ui-mocks"]
+
+[tool.ruff.lint]
+# M9 tightened — bug-catchers + import order + modern Python.
+select = ["E", "F", "W", "I", "B", "UP", "SIM"]
+ignore = ["E501", "B008", "B017", "B904", "SIM108", "SIM112", "SIM117"]
+
+[tool.coverage.run]
+source = ["src/tekla_nest"]
+omit = [
+    "*/main.py",
+    "*/admin/main.py",
+    "*/__init__.py",
+]
+
+[tool.coverage.report]
+skip_covered = false
+show_missing = true

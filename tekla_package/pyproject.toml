@@ -1,0 +1,36 @@
+# Tekla Package — uv workspace root (virtual)
+#
+# Members are added as each component is migrated:
+#   tekla-common          (done)
+#   tekla-nest            (pending)
+#   tekla-admin-console   (pending)
+# tekla-iac is NOT a workspace member (Firebase Functions manage their own requirements.txt).
+
+[tool.uv.workspace]
+members = ["tekla-common", "tekla-nest", "tekla-admin-console"]
+
+[tool.uv.sources]
+tekla-common = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "ruff>=0.6",
+    "pytest>=7",
+    "pytest-qt>=4",
+    "pytest-cov>=5",
+    "pre-commit>=3",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM"]
+ignore = ["E501", "B008", "B017", "B904", "SIM108", "SIM112", "SIM117"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "windows_only: marks tests that require Windows",
+]

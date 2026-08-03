@@ -1,0 +1,22 @@
+[project]
+name = "tekla-common"
+version = "2.1.0"
+description = "Shared foundation for Tekla Nest: config, design system, theme, i18n, widgets and bundled resources"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "PySide6>=6.5",
+    "PyYAML>=6.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tekla_common"]
+
+# Ship config.yaml and the resources/ tree (logos, languages, report template) as package data
+[tool.hatch.build.targets.wheel.force-include]
+"src/tekla_common/config.yaml" = "tekla_common/config.yaml"
+"src/tekla_common/resources" = "tekla_common/resources"

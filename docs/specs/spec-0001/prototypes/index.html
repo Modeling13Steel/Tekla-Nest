@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UI Design System prototype &mdash; spec-0001</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="prototype-index">
+  <header class="prototype-index__header">
+    <p class="prototype-index__eyebrow">Prototype index</p>
+    <h1>UI Design System</h1>
+    <dl class="prototype-index__metadata" aria-label="Prototype metadata">
+      <div>
+        <dt>Spec</dt>
+        <dd>spec-0001</dd>
+      </div>
+      <div>
+        <dt>Target device(s)</dt>
+        <dd>Windows desktop, 1440px baseline, 1366px minimum, high-DPI scaling</dd>
+      </div>
+      <div>
+        <dt>Source mockups</dt>
+        <dd><a href="../mockups.md">mockups.md</a></dd>
+      </div>
+      <div>
+        <dt>Design decisions</dt>
+        <dd><a href="../ux.md">ux.md</a></dd>
+      </div>
+    </dl>
+  </header>
+
+  <main id="main" class="prototype-index__main">
+    <section class="prototype-index__section" aria-labelledby="overview-heading">
+      <h2 id="overview-heading">Overview</h2>
+      <p>This prototype renders the Tekla Nest lightweight PySide6 design-system board from mockups.md. It covers foundation tokens, data-table patterns, forms and dialogs, toolbar/status behavior, accessibility/state coverage, and one representative shell composition without changing production code.</p>
+    </section>
+
+    <section class="prototype-index__section" aria-labelledby="flow-heading">
+      <h2 id="flow-heading">Primary flow</h2>
+      <ol class="prototype-index__flow">
+        <li>Use foundation tokens for restrained engineering desktop presentation.</li>
+        <li>Apply the data-table system to parts, stock, editable cells, filters, selection, and batch actions.</li>
+        <li>Use dialogs and forms for activation, color schema, validation, blocking progress, and recovery.</li>
+        <li>Use menu, toolbar, and status patterns for command access and persistent feedback.</li>
+        <li>Validate keyboard paths, accessible names, high contrast, reduced motion, and reusable state coverage.</li>
+        <li>Review the representative three-panel shell in a partial-result warning state.</li>
+      </ol>
+    </section>
+
+    <section class="prototype-index__section" aria-labelledby="screens-heading">
+      <h2 id="screens-heading">Screens and states</h2>
+      <p>Grouped by flow step or screen. Each linked file represents one included screen/state from the mockup specification.</p>
+      <nav class="prototype-index__navigation" aria-label="Prototype screens and states">
+        <section class="prototype-index__group" aria-labelledby="group-foundations">
+          <h3 id="group-foundations">F01 Foundation tokens</h3>
+          <ul>
+            <li><a href="./prototype-foundations.html">prototype-foundations.html</a> - color, type, spacing, shape, and focus role examples.</li>
+          </ul>
+        </section>
+        <section class="prototype-index__group" aria-labelledby="group-table">
+          <h3 id="group-table">F02 Data table system</h3>
+          <ul>
+            <li><a href="./prototype-data-table-system.html">prototype-data-table-system.html</a> - table anatomy, sorting, filtering, selection, editing, and reusable states.</li>
+          </ul>
+        </section>
+        <section class="prototype-index__group" aria-labelledby="group-dialogs">
+          <h3 id="group-dialogs">F03 Forms and dialogs</h3>
+          <ul>
+            <li><a href="./prototype-forms-dialogs.html">prototype-forms-dialogs.html</a> - activation, color schema, validation, loading, success, and error examples.</li>
+          </ul>
+        </section>
+        <section class="prototype-index__group" aria-labelledby="group-toolbar">
+          <h3 id="group-toolbar">F04 Toolbar, menu, and status</h3>
+          <ul>
+            <li><a href="./prototype-toolbar-status.html">prototype-toolbar-status.html</a> - shell command access, action availability, and persistent status feedback.</li>
+          </ul>
+        </section>
+        <section class="prototype-index__group" aria-labelledby="group-accessibility">
+          <h3 id="group-accessibility">F05 Accessibility and state matrix</h3>
+          <ul>
+            <li><a href="./prototype-accessibility-state-matrix.html">prototype-accessibility-state-matrix.html</a> - keyboard path, names, roles, states, high contrast, and reduced-motion notes.</li>
+          </ul>
+        </section>
+        <section class="prototype-index__group" aria-labelledby="group-shell">
+          <h3 id="group-shell">F06 Representative shell</h3>
+          <ul>
+            <li><a href="./prototype-representative-shell.html">prototype-representative-shell.html</a> - current three-panel shell with partial-result warnings.</li>
+          </ul>
+        </section>
+      </nav>
+    </section>
+
+    <section class="prototype-index__section" aria-labelledby="sources-heading">
+      <h2 id="sources-heading">Source artifacts</h2>
+      <ul class="prototype-index__sources">
+        <li><a href="../spec.md">spec.md</a> - canonical specification and Section 13 decision register.</li>
+        <li><a href="../ux.md">ux.md</a> - UX Design Decision Record.</li>
+        <li><a href="../mockups.md">mockups.md</a> - tool-agnostic screen and state specification.</li>
+        <li><a href="./styles.css">styles.css</a> - shared prototype styling generated from the applicable design guidance.</li>
+      </ul>
+    </section>
+
+    <section class="prototype-index__section" aria-labelledby="validation-heading">
+      <h2 id="validation-heading">Validation notes</h2>
+      <ul class="prototype-index__validation">
+        <li>All prototype screens use the same shell structure saved in docs/specs/_prototype-shell.html.</li>
+        <li>The prototype uses the selected modern SaaS/data-product palette; exact Tekla palette adoption remains Section 13 follow-up Q-025.</li>
+        <li>State examples pair color with text, labels, badges, or placement so meaning is not color-only.</li>
+        <li>Screen files are semantic vanilla HTML and import the shared styles.css file.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

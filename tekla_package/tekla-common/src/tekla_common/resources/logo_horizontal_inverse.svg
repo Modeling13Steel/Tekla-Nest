@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 96" role="img" aria-labelledby="title desc">
+  <title id="title">M13S Nest inverse logo</title>
+  <desc id="desc">Transparent inverse M13S Nest logo for dark backgrounds.</desc>
+  <g fill="none" fill-rule="evenodd">
+    <g transform="translate(16 16)">
+      <rect x="12" y="12" width="11" height="40" rx="5.5" fill="#2dd4bf"/>
+      <rect x="41" y="12" width="11" height="40" rx="5.5" fill="#60a5fa"/>
+      <rect x="25" y="44" width="12" height="47" rx="6" fill="#67e8f9" transform="rotate(-38 31 67.5)"/>
+      <path d="M18 16h30M18 48h30" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <text x="96" y="48" fill="#ffffff" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="30" font-weight="700">M13S Nest</text>
+    <text x="98" y="70" fill="#dbeafe" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="13" font-weight="600" letter-spacing="1.8">CUT OPTIMIZATION</text>
+  </g>
+</svg>

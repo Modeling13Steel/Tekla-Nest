@@ -1,0 +1,50 @@
+name: IaC (validate — no deploy)
+
+# Validates the license-server infrastructure. Deployment is a MANUAL, operator-run
+# step (see docs) — this workflow never applies/deploys anything.
+
+on:
+  push:
+    branches: [main]
+    paths: ["tekla-iac/**", ".github/workflows/iac.yml"]
+  pull_request:
+    paths: ["tekla-iac/**"]
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tekla-iac/terraform
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform format check
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init (no backend)
+        run: terraform init -backend=false
+
+      - name: Terraform validate
+        run: terraform validate
+
+  functions:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tekla-iac/functions
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Syntax-check Cloud Functions
+        run: python -m py_compile main.py
+
+      - name: Verify dependencies resolve
+        run: python -m pip install --dry-run -r requirements.txt

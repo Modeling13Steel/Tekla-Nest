@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Accessibility and State Matrix - spec-0001</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="prototype-screen">
+  <a class="skip-link" href="#main">Skip to prototype content</a>
+  <div class="screen-frame" aria-label="Tekla Nest prototype shell">
+    <header class="app-chrome">
+      <nav class="menu-bar" aria-label="Application menu">
+        <a href="./prototype-toolbar-status.html">File</a>
+        <a href="./prototype-data-table-system.html">Stock</a>
+        <a href="./prototype-representative-shell.html">Nesting</a>
+        <a href="./prototype-forms-dialogs.html">View</a>
+      </nav>
+      <div class="toolbar" role="toolbar" aria-label="Primary actions">
+        <div class="brand-mark" aria-hidden="true">TN</div>
+        <p class="app-title">M13S Nest</p>s
+        <div class="toolbar-actions">
+          <a class="button button-secondary" href="./prototype-data-table-system.html">Load Parts</a>
+          <a class="button button-primary" href="./prototype-representative-shell.html">Calculate</a>
+          <a class="button button-secondary" href="./prototype-toolbar-status.html">Export</a>
+        </div>
+      </div>
+    </header>
+    <main id="main" class="app-main">
+      <section class="board-frame" aria-labelledby="accessibility-title">
+        <div class="board-intro">
+          <p class="prototype-index__eyebrow">F05 - Accessibility and State Matrix</p>
+          <h1 id="accessibility-title">Accessibility and state matrix</h1>
+          <p>Every reusable pattern must define state, recovery, focus, and announcement behavior.</p>
+        </div>
+
+        <section class="grid-3" aria-label="Accessibility examples">
+          <div class="component-card">
+            <h2>Keyboard path</h2>
+            <p>Menu bar -> toolbar actions -> parts panel -> parts table -> stock tabs/table -> report preview -> status recovery actions.</p>
+          </div>
+          <div class="component-card">
+            <h2>Accessible names</h2>
+            <p>Use names such as <strong>Move bar row 3 up</strong>, <strong>Primary color #1d4ed8</strong>, and <strong>Comp. (mm), sorted ascending</strong>.</p>
+          </div>
+          <div class="component-card">
+            <h2>High contrast and motion</h2>
+            <p>Use system colors in forced-colors mode. Feedback must not depend on animation.</p>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="matrix-heading">
+          <h2 id="matrix-heading">State coverage</h2>
+          <div class="table-wrap">
+            <table class="matrix" aria-label="Component state coverage matrix">
+              <thead>
+                <tr>
+                  <th scope="col">Pattern</th>
+                  <th scope="col">Default</th>
+                  <th scope="col">Loading</th>
+                  <th scope="col">Empty</th>
+                  <th scope="col">Error</th>
+                  <th scope="col">Success</th>
+                  <th scope="col">Disabled</th>
+                  <th scope="col">Validation</th>
+                  <th scope="col">Permission</th>
+                  <th scope="col">Partial result</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Buttons</th><td class="check">Label + role</td><td class="check">Text progress</td><td class="not-applicable">n/a</td><td class="check">Recovery</td><td class="check">Confirm</td><td class="check">Reason</td><td class="not-applicable">n/a</td><td class="check">Gate</td><td class="risk">Warn</td></tr>
+                <tr><th scope="row">Forms</th><td class="check">Label + help</td><td class="check">Guard submit</td><td class="not-applicable">n/a</td><td class="check">Explain</td><td class="check">Persist</td><td class="check">Reason</td><td class="check">Focus field</td><td class="check">Activation path</td><td class="not-applicable">n/a</td></tr>
+                <tr><th scope="row">Dialogs</th><td class="check">Title + initial focus</td><td class="check">Announce</td><td class="not-applicable">n/a</td><td class="check">Preserve input</td><td class="check">Close path</td><td class="check">Explain</td><td class="check">Focus trap</td><td class="check">Activate</td><td class="not-applicable">n/a</td></tr>
+                <tr><th scope="row">Tables</th><td class="check">Headers + cells</td><td class="check">Stable headers</td><td class="check">Next action</td><td class="check">Retry</td><td class="check">Updated count</td><td class="check">Reason</td><td class="check">Cell context</td><td class="check">License note</td><td class="check">Row markers</td></tr>
+                <tr><th scope="row">Status</th><td class="check">Persistent ready</td><td class="check">Live region</td><td class="risk">Disabled rationale</td><td class="check">Persistent</td><td class="check">Persistent</td><td class="check">Reason</td><td class="risk">Contextual</td><td class="check">Gated</td><td class="check">Warn</td></tr>
+                <tr><th scope="row">Report links</th><td class="check">Named controls</td><td class="not-applicable">n/a</td><td class="not-applicable">n/a</td><td class="check">Retry/export</td><td class="check">Exported</td><td class="check">Reason</td><td class="not-applicable">n/a</td><td class="check">License</td><td class="check">Review affected rows</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="focus-examples-heading">
+          <h2 id="focus-examples-heading">Required visible focus examples</h2>
+          <ul class="focus-demo-list">
+            <li><a class="button button-primary is-focused" href="./prototype-forms-dialogs.html">Focused button: Activate</a></li>
+            <li><a class="tab is-focused" href="./prototype-representative-shell.html#client-stock">Focused tab-style control: Cliente</a></li>
+            <li><span class="editable-cell is-focused" tabindex="0" role="gridcell" aria-label="Focused editable table cell, quantity row B-108">Focused editable cell: Quant. 0</span></li>
+            <li><a class="report-action is-focused" href="./prototype-representative-shell.html#row-3-down">Focused report link: Move bar row 3 down</a></li>
+          </ul>
+        </section>
+      </section>
+    </main>
+    <footer class="status-bar" role="status" aria-live="polite">
+      Accessibility matrix ready.
+    </footer>
+  </div>
+  <aside class="annotations" aria-labelledby="annotation-heading">
+    <h2 id="annotation-heading">Prototype annotations</h2>
+    <ul class="annotation-list">
+      <li>Related Section 13 IDs: Q-015, Q-020, Q-021.</li>
+      <li>The matrix is a reference frame, not a product screen; behavioral details are documented here rather than embedded inside product UI examples.</li>
+      <li>Qt implementation must map these examples to accessible names, roles, states, descriptions, and value changes where supported.</li>
+    </ul>
+  </aside>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "license-server",
+      "runtime": "python312",
+      "ignore": ["venv", "__pycache__"]
+    }
+  ]
+}

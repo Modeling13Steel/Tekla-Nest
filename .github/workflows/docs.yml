@@ -1,0 +1,52 @@
+name: Docs (build + deploy to GitHub Pages)
+
+# NOTE: tekla_package/ is a SUBFOLDER of this repo. GitHub Actions only runs
+# workflows from the repo-root .github/workflows/, so this root workflow drives
+# the docs that live under tekla_package/. (The copy inside
+# tekla_package/.github/workflows/docs.yml is inert until/unless tekla_package
+# becomes its own repo root.)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "tekla_package/docs/**"
+      - "tekla_package/mkdocs.yml"
+      - ".github/workflows/docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install MkDocs Material
+        run: pip install mkdocs-material
+      - name: Build site (strict)
+        run: mkdocs build --strict -f tekla_package/mkdocs.yml
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: tekla_package/site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

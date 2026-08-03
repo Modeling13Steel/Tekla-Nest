@@ -1,0 +1,5 @@
+Tekla Nest UI refactor — test-count floor
+Captured: 2026-05-22
+Command: .venv/bin/python -m pytest -q
+Result: 240 passed
+
