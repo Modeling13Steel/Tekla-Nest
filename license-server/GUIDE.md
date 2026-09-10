@@ -93,6 +93,21 @@ Firebase stores the live server data:
 
 Admins should not edit secrets by hand unless rotating keys. Editing Firestore records manually should be rare; prefer the admin CLI.
 
+## Automated deploy
+
+`scripts/deploy.py` automates everything below (tool install, login, one-time
+bootstrap, deploy) and works on macOS, Linux, and Windows:
+
+```bash
+python3.12 scripts/deploy.py
+```
+
+It prompts before installing missing CLIs or creating secrets. Use
+`--deploy-only` for a routine redeploy once bootstrap is done, or `--yes` to
+skip prompts (e.g. in CI). Run `python3.12 scripts/deploy.py --help` for all
+options. The sections below describe what the script does step by step, and
+remain the manual/troubleshooting reference.
+
 ## Initial Firebase setup
 
 Install tools:
@@ -864,6 +879,7 @@ license-server/
 ├── scripts/
 │   ├── admin_cli.py
 │   ├── bootstrap_functions_venv.py
+│   ├── deploy.py
 │   └── generate_keys.py
 ├── terraform/          # optional IaC alternative to manual gcloud setup
 │   ├── main.tf
