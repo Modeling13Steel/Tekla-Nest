@@ -152,7 +152,11 @@ def resolve_project_id(explicit: str | None) -> str:
 
     firebaserc = ROOT / ".firebaserc"
     if firebaserc.exists():
-        projects = json.loads(firebaserc.read_text()).get("projects", {})
+        try:
+            projects = json.loads(firebaserc.read_text()).get("projects", {})
+        except (OSError, json.JSONDecodeError) as exc:
+            print(f"Warning: could not read {firebaserc}: {exc}")
+            projects = {}
         if projects:
             return next(iter(projects.values()))
 
