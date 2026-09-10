@@ -102,6 +102,16 @@ bootstrap, deploy) and works on macOS, Linux, and Windows:
 python3.12 scripts/deploy.py
 ```
 
+From the repo root on macOS/Linux you can also run it via:
+
+```bash
+make deploy-infrastructure
+```
+
+`make` is not native on Windows, so Windows users should run the script
+directly with `python3.12 scripts/deploy.py` from `license-server/` (Git Bash
+or WSL also work if you prefer the `make` target there).
+
 It prompts before installing missing CLIs or creating secrets. Use
 `--deploy-only` for a routine redeploy once bootstrap is done, or `--yes` to
 skip prompts (e.g. in CI). Run `python3.12 scripts/deploy.py --help` for all

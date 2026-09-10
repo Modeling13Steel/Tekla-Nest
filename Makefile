@@ -173,6 +173,10 @@ infrastructure-package: ## Package license-server infrastructure separately from
 	@echo ""
 	@echo "✔ Infrastructure package ready: $(DIST_DIR)/tekla-nest-license-server-infrastructure.zip"
 
+.PHONY: deploy-infrastructure
+deploy-infrastructure: ## Deploy license-server Firebase infrastructure (cross-platform; use `make` on macOS/Linux, run the script directly on Windows)
+	cd license-server && python3.12 scripts/deploy.py
+
 .PHONY: package-all
 package-all: installers infrastructure-package ## Build separated desktop installers + infrastructure package
 
