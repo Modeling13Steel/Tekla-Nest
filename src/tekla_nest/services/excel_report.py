@@ -113,10 +113,10 @@ def export_excel(
     profile_count = len(result.profiles)
 
     kpi_rows = [
-        ("Overall Waste %", round(result.overall_waste_pct, 2)),
-        ("Total Bars", total_bars),
-        ("Unfit Pieces", unfit_count),
-        ("Profiles", profile_count),
+        (labels.overall_waste, round(result.overall_waste_pct, 2)),
+        (labels.total_bars, total_bars),
+        (labels.unfit_pieces_count, unfit_count),
+        (labels.profiles, profile_count),
     ]
     for label_text, value in kpi_rows:
         ws_summary.cell(row=current_row, column=1, value=label_text).font = Font(bold=True)
@@ -243,7 +243,7 @@ def export_excel(
 
         # e. Unfit pieces
         if prof.unfit_pieces:
-            ws_summary.cell(row=current_row, column=1, value="Unfit Pieces:").font = Font(bold=True)
+            ws_summary.cell(row=current_row, column=1, value=labels.unfit_pieces_header).font = Font(bold=True)
             current_row += 1
             for piece in prof.unfit_pieces:
                 ws_summary.cell(row=current_row, column=1, value=piece.mark)

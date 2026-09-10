@@ -312,6 +312,7 @@ report:
   overall_waste: Overall waste
   profiles: Profiles
   total_bars: Total bars
+  unfit_pieces_count: Unfit pieces
   waste: Waste
   no_stock: No stock available for this profile.
   unfit_pieces_header: "Pieces not fitted:"

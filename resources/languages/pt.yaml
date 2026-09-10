@@ -312,6 +312,7 @@ report:
   overall_waste: Desperdício total
   profiles: Perfis
   total_bars: Total de barras
+  unfit_pieces_count: Peças não encaixadas
   waste: Desperdício
   no_stock: Não há stock disponível para este perfil.
   unfit_pieces_header: "Peças não encaixadas:"
