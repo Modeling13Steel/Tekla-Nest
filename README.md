@@ -1,4 +1,3 @@
-session: copilot --resume=e27587bd-474d-49e3-89a8-b81aa477ce0b
 # Tekla Nest
 
 1D cutting optimization for steel bar stock.  Reads selected parts from
