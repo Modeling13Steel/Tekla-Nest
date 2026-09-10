@@ -910,6 +910,7 @@ class NestPresenter(QObject):
                         profile=profile,
                         material=material,
                         waste_pct=100.0,
+                        unfit_pieces=pieces,
                     )
                 )
                 continue
@@ -922,6 +923,7 @@ class NestPresenter(QObject):
                         profile=profile,
                         material=material,
                         waste_pct=100.0,
+                        unfit_pieces=pieces,
                     )
                 )
             else:
