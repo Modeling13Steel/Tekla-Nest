@@ -1,11 +1,14 @@
 """Runtime language catalog for the Qt UI."""
 from __future__ import annotations
 
+import logging
 import re
 from pathlib import Path
 from typing import Any
 
 from .config.app_config import _BASE_DIR, get_config
+
+LOGGER = logging.getLogger(__name__)
 
 DEFAULT_LANGUAGE = "en"
 SUPPORTED_LANGUAGES = ("en", "pt")
@@ -91,7 +94,11 @@ def _catalog(code: str) -> dict[str, Any]:
     if not path.exists():
         _catalog_cache[code] = {}
         return _catalog_cache[code]
-    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    except (OSError, UnicodeDecodeError, yaml.YAMLError) as exc:
+        LOGGER.warning("Could not load language catalog '%s': %s", path, exc)
+        data = {}
     if not isinstance(data, dict):
         data = {}
     _catalog_cache[code] = data
