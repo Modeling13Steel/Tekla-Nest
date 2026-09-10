@@ -13,18 +13,12 @@ build/
 .coverage
 htmlcov/
 
-# Docs
-site/
-
-# Terraform
-**/.terraform/
-*.tfstate
-*.tfstate.*
-
 # Secrets — never commit
 **/keys/*.pem
 *.dat
 *.tfvars
+.env
+.env.*
 
 # OS
 .DS_Store
