@@ -30,6 +30,10 @@ log = logging.getLogger(__name__)
 # Re-validate every 30 days (configurable in config.yaml)
 _DEFAULT_REVALIDATION_DAYS = 30
 
+# Grace window for legitimate clock skew (DST changes, NTP jitter).
+# Anything beyond this counts as a suspicious backward clock jump.
+_CLOCK_ROLLBACK_TOLERANCE_SECONDS = 3600
+
 _PUBLIC_KEY_FILE = Path(__file__).parent / "public_key.pem"
 
 _TOKEN_DIR = Path.home() / ".teklanest"
@@ -93,17 +97,28 @@ class LicenseManager:
 
         1. Verify local JWT signature + expiry (offline).
         2. If re-validation interval exceeded, phone home.
+        3. If the system clock appears to have jumped backward
+           (a common way to bypass expiry/revocation offline), phone
+           home is forced and *not* allowed to fail open.
 
         Raises LicenseError if invalid.
         """
         payload = self._load_and_verify()
         self._license_key = payload.get("sub", "")
 
+        clock_rolled_back = self._check_clock_rollback()
+
         # Check if we need to re-validate online
         last_check = self._last_validation_time()
         days_since = (time.time() - last_check) / 86400
 
-        if days_since >= self._revalidation_days:
+        if clock_rolled_back:
+            # A manipulated clock can't be trusted to gate offline
+            # expiry/revalidation-interval checks, so require a real
+            # online confirmation instead of silently accepting the
+            # cached token.
+            self._revalidate_online(fail_closed=True)
+        elif days_since >= self._revalidation_days:
             self._revalidate_online()
 
     def deactivate(self) -> None:
@@ -286,8 +301,46 @@ class LicenseManager:
         except LicenseError:
             return 0.0
 
-    def _revalidate_online(self) -> None:
-        """Phone home to confirm license is still active."""
+    def _check_clock_rollback(self) -> bool:
+        """Return True if the wall clock has jumped backward beyond a
+        small tolerance since it was last observed.
+
+        This is a common way to bypass offline expiry/revalidation-
+        interval checks (both of which rely on ``time.time()``), so a
+        detected rollback forces a real online re-check instead of
+        trusting the cached token.
+
+        The guard file lives next to ``_TOKEN_FILE`` (derived at call
+        time, not a separate module constant) so it automatically
+        follows wherever tests/callers redirect token storage.
+        """
+        guard_file = _TOKEN_FILE.parent / "clock_guard.json"
+        now = time.time()
+        try:
+            hwm = float(json.loads(guard_file.read_text(encoding="utf-8")).get("hwm", 0.0))
+        except (OSError, ValueError, json.JSONDecodeError, AttributeError):
+            hwm = 0.0
+
+        rolled_back = hwm > 0 and now < (hwm - _CLOCK_ROLLBACK_TOLERANCE_SECONDS)
+
+        try:
+            guard_file.parent.mkdir(parents=True, exist_ok=True)
+            guard_file.write_text(
+                json.dumps({"hwm": max(now, hwm)}), encoding="utf-8"
+            )
+        except OSError:
+            log.warning("Could not persist clock-integrity marker.")
+
+        return rolled_back
+
+    def _revalidate_online(self, *, fail_closed: bool = False) -> None:
+        """Phone home to confirm license is still active.
+
+        When ``fail_closed`` is True (used after a detected clock
+        rollback), a network failure is *not* swallowed — it propagates
+        as a ``LicenseNetworkError`` so an offline, clock-manipulated
+        machine can't simply avoid the check to stay "valid" forever.
+        """
         try:
             data = self._post_json(
                 "validate",
@@ -298,6 +351,8 @@ class LicenseManager:
                 raise_on_error=False,
             )
         except LicenseNetworkError:
+            if fail_closed:
+                raise
             log.warning("Could not reach license server for re-validation")
             return  # graceful offline — use cached token
 
