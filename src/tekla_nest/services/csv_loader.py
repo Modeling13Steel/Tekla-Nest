@@ -6,20 +6,18 @@ Handles both ';' and ',' separators with auto-detection.
 from __future__ import annotations
 
 import csv
-import sys
+import logging
 from pathlib import Path
 
 from ..config.app_config import get_config
 from ..models import PartEntry, StockEntry
 
+LOGGER = logging.getLogger(__name__)
+
 
 def _log(msg: str) -> None:
-    """Temporary diagnostic print — remove once Windows CSV issue is resolved."""
-    try:
-        if sys.stdout is not None:
-            print(f"[CSV] {msg}", flush=True)
-    except Exception:
-        pass
+    """Diagnostic trace for CSV import/export, gated behind DEBUG logging."""
+    LOGGER.debug(msg)
 
 
 class CsvError(Exception):
