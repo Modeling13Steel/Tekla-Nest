@@ -427,9 +427,9 @@ def admin_status(req: https_fn.Request) -> https_fn.Response:
 
     @require_admin
     def handler(r):
-        key = r.args.get("key", "").strip()
+        key = r.headers.get("X-License-Key", "").strip()
         if not key:
-            return _error("?key= query param required")
+            return _error("X-License-Key header required")
         data, err = _get_license(key)
         if err:
             return err

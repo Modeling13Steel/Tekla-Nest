@@ -115,7 +115,7 @@ def cmd_list(args: argparse.Namespace) -> None:
 
 
 def cmd_status(args: argparse.Namespace) -> None:
-    _print_json(_request("GET", "admin_status", params={"key": args.key}))
+    _print_json(_request("GET", "admin_status", extra_headers={"X-License-Key": args.key}))
 
 
 def cmd_revoke(args: argparse.Namespace) -> None:
