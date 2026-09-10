@@ -170,10 +170,14 @@ def test_csv_purchase_section_has_correct_aggregation(tmp_path):
 
 def test_excel_per_material_sheets_do_not_collide(tmp_path):
     """Feedback #5 + #10 — same profile name with two materials must
-    yield two distinct sheets, not silently overwrite."""
+    yield two distinct sections in the Summary sheet, not silently
+    overwrite each other."""
     path = export_excel(_multi_material_result(), tmp_path / "report.xlsx")
     wb = load_workbook(path)
-    names = wb.sheetnames
-    # Both HEA240 materials should be present as separate sheets.
-    hea_sheets = [n for n in names if n.startswith("HEA240")]
-    assert len(hea_sheets) == 2
+    # The report is a single Summary sheet (+ Purchase); per-profile ×
+    # material sections are distinguished by header text, not separate
+    # sheets. Both HEA240 materials must have their own header row.
+    ws = wb[wb.sheetnames[0]]
+    values = {cell.value for row in ws.iter_rows() for cell in row}
+    assert "HEA240 — S235JR" in values
+    assert "HEA240 — S275JR" in values

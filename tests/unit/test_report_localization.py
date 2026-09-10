@@ -87,20 +87,37 @@ def test_excel_report_uses_current_language_for_labels(tmp_path):
     path = export_excel(_sample_result(), tmp_path / "report.xlsx")
 
     workbook = load_workbook(path)
-    assert "Resumo" in workbook.sheetnames
-    summary = workbook["Resumo"]
-    assert summary["A1"].value == "Perfil"
-    assert summary["B1"].value == "Material"
-    assert summary["C1"].value == "Barras usadas"
-    assert summary["D1"].value == "Desperdício %"
-    assert summary["E1"].value == "Sobra %"
-    assert summary["A4"].value == "TOTAL"
+    assert workbook.sheetnames == ["Resumo", "Compras"]
 
-    profile = workbook["IPE200"]
-    assert profile["B1"].value == "Marca da barra"
-    assert profile["C1"].value == "Comprimento da barra"
-    assert profile["F1"].value == "Desperdício (mm)"
-    assert profile["H1"].value == "Origem"
+    # Assert on presence of localized strings rather than fixed row/column
+    # addresses — the Summary sheet has a variable-height logo/company/KPI
+    # preamble before the per-profile sections, so exact cell positions are
+    # an implementation detail, not what localization is meant to guarantee.
+    summary_values = {
+        cell.value
+        for row in workbook["Resumo"].iter_rows()
+        for cell in row
+        if cell.value is not None
+    }
+    assert "IPE200" in summary_values
+    assert "Marca da barra" in summary_values
+    assert "Comprimento da barra" in summary_values
+    assert "Cortes" in summary_values
+    assert "Marcas dos cortes" in summary_values
+    assert "Desperdício (mm)" in summary_values
+    assert "Material" in summary_values
+    assert "Origem" in summary_values
+    assert "Bar Mark" not in summary_values
+
+    purchase_values = {
+        cell.value
+        for row in workbook["Compras"].iter_rows()
+        for cell in row
+        if cell.value is not None
+    }
+    assert "Perfil" in purchase_values
+    assert "Barras usadas" in purchase_values
+    assert "Metros lineares" in purchase_values
 
 
 def test_english_report_title_replaces_default_portuguese_config_title():
