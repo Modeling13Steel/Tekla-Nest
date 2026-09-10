@@ -7,7 +7,7 @@
 [docs/specs/ms-006-pythonnet-compat-fix.md](../specs/ms-006-pythonnet-compat-fix.md)
 
 ## ADR
-[docs/adr/0002-pythonnet-version-pin.md](../adr/0002-pythonnet-version-pin.md)
+[docs/archive/adr/0002-pythonnet-version-pin.md](../archive/adr/0002-pythonnet-version-pin.md)
 
 ## Tasks
 

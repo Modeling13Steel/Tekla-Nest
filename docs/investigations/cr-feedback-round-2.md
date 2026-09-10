@@ -94,7 +94,7 @@ This is a known Qt limitation: `QTextDocument`'s internal resource loading mecha
 - `src/tekla_nest/presenters/nest_presenter.py` lines 479-494 — `export_pdf()` uses `QTextDocument`
 - `resources/report_template.html` lines 317-323 — image rendering block
 
-**Spec and ADR:** [docs/specs/ms-001-pdf-image-export-fix.md](../specs/ms-001-pdf-image-export-fix.md), [docs/adr/0001-pdf-image-qtextdocument.md](../adr/0001-pdf-image-qtextdocument.md)
+**Spec and ADR:** [docs/specs/ms-001-pdf-image-export-fix.md](../specs/ms-001-pdf-image-export-fix.md), [docs/archive/adr/0001-pdf-image-qtextdocument.md](../archive/adr/0001-pdf-image-qtextdocument.md)
 
 ---
 

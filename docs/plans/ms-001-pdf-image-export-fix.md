@@ -8,7 +8,7 @@
 - [x] Read and understand `export_pdf` in `nest_presenter.py`
 - [x] Define `_DataUriTextDocument(QTextDocument)` with `loadResource()` override
 - [x] Replace `doc = QTextDocument()` with `doc = _DataUriTextDocument()`
-- [x] Write ADR (`docs/adr/0001-pdf-image-qtextdocument.md`)
+- [x] Write ADR (`docs/archive/adr/0001-pdf-image-qtextdocument.md`)
 - [x] Write spec (`docs/specs/ms-001-pdf-image-export-fix.md`)
 - [x] Write test index (`docs/tests/ms-001/index.md`)
 - [x] Write TEST-001 (`docs/tests/ms-001/TEST-001-html-contains-image.md`)
