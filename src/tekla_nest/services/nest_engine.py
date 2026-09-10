@@ -167,7 +167,9 @@ class NestEngine:
 
         for piece in pieces:
             # Fitting onto an already-opened bar means a fresh cut after
-            # an existing one, so we must reserve one kerf width.
+            # an existing one, so we must reserve one kerf width — but
+            # only the piece's own length is recorded in ``cuts`` (kerf
+            # is tracked separately) so exports show the real cut length.
             needed_with_kerf = piece.length + self.kerf_width
 
             fit_bar = next(
@@ -175,8 +177,9 @@ class NestEngine:
                 None,
             )
             if fit_bar is not None:
-                fit_bar.cuts.append(needed_with_kerf)
+                fit_bar.cuts.append(piece.length)
                 fit_bar.cut_marks.append(piece.mark)
+                fit_bar.kerf_used += self.kerf_width
                 continue
 
             # Opening a new bar: the very first cut has no preceding cut,
@@ -207,8 +210,12 @@ class NestEngine:
         # length exists. Crossing source or material would silently
         # re-attribute the bar and confuse the purchase report
         # (feedback #11 — the engine must keep client/market distinct).
+        # The matched stock entry is removed from ``available`` so a
+        # single physical piece of stock can't be "reused" as the
+        # downsize target for more than one bar.
         for bar in result_bars:
             best_length = bar.original_length
+            best_stock: StockBar | None = None
             for stock in available:
                 if (
                     stock.source == bar.source
@@ -217,7 +224,10 @@ class NestEngine:
                     and bar.used_length <= stock.length
                 ):
                     best_length = stock.length
-            bar.original_length = best_length
+                    best_stock = stock
+            if best_stock is not None:
+                bar.original_length = best_length
+                available.remove(best_stock)
 
         return result_bars, unfit_pieces
 

@@ -57,8 +57,10 @@ class TestKerfArithmetic:
         result = engine.optimize(pieces, [_bar(6000)])
         assert result is not None
         assert len(result.bars) == 1
-        # First cut has no kerf, subsequent ones do
-        assert result.bars[0].cuts == [1990, 1995, 1995]
+        # ``cuts`` always stores the real piece length (for exports); kerf
+        # is tracked separately via ``kerf_used`` and only affects
+        # free_length/used_length, not the displayed cut lengths.
+        assert result.bars[0].cuts == [1990, 1990, 1990]
         assert result.bars[0].free_length == pytest.approx(20)
 
     def test_kerf_blocks_third_cut(self):
