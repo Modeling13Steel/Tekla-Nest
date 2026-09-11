@@ -1,0 +1,38 @@
+site_name: Tekla Nest — Documentation
+site_description: Install, build, deploy and administer the Tekla Nest product family.
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      toggle:
+        icon: material/weather-night
+        name: Dark mode
+    - scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Light mode
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - search.suggest
+
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - Nesting app: nesting-app.md
+  - Admin console: admin-console.md
+  - Infrastructure (license server): infrastructure.md
+  - For developers: development.md
+  - Releases:
+      - v2.1.0: releases/v2.1.0.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - tables
+  - toc:
+      permalink: true
