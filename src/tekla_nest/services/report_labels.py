@@ -23,6 +23,7 @@ def report_labels(config: AppConfig) -> SimpleNamespace:
         overall_waste=tr("report.overall_waste"),
         profiles=tr("report.profiles"),
         total_bars=tr("report.total_bars"),
+        unfit_pieces_count=tr("report.unfit_pieces_count"),
         waste=tr("report.waste"),
         bar_mark=tr("report.columns.bar_mark"),
         bar_length=tr("report.columns.bar_length"),

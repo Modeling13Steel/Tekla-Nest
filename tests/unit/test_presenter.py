@@ -67,13 +67,18 @@ class TestPartLoading:
         assert "not found" in errors[0].lower() or "failed" in errors[0].lower()
 
     def test_no_provider_emits_error(self, qtbot):
+        # No provider set at construction: NestPresenter now lazily creates
+        # a TeklaPartProvider on demand, so failure (e.g. Tekla not
+        # installed/running) surfaces via csv_error_occurred, not
+        # error_occurred.
         presenter = NestPresenter()
         errors = []
-        presenter.error_occurred.connect(errors.append)
+        presenter.csv_error_occurred.connect(
+            lambda title, detail: errors.append(detail)
+        )
         presenter.load_parts_from_provider()
 
         assert len(errors) == 1
-        assert "no part provider" in errors[0].lower()
 
     def test_set_parts_directly(self, qtbot):
         presenter = NestPresenter()

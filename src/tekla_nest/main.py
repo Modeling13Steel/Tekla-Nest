@@ -12,7 +12,7 @@ import sys
 
 from PySide6.QtWidgets import QApplication, QMessageBox
 
-from .config.app_config import load_config
+from .config.app_config import AppConfig, ConfigError, load_config
 from .presenters.nest_presenter import NestPresenter
 from .services.theme_service import ThemeService
 from .theme import build_app_stylesheet
@@ -87,7 +87,16 @@ def main() -> None:
             force=True,
         )
 
-    cfg = load_config()
+    config_error: ConfigError | None = None
+    try:
+        cfg = load_config()
+    except ConfigError as exc:
+        # A malformed config.yaml must not crash the app before the UI can
+        # even report the problem — fall back to defaults and surface the
+        # error to the user once QApplication exists.
+        LOGGER.error("Invalid config.yaml, falling back to defaults: %s", exc)
+        cfg = AppConfig()
+        config_error = exc
 
     # Windows compatibility: pick the HiDPI rounding policy BEFORE the
     # QApplication is constructed. PassThrough preserves crisp text at
@@ -101,6 +110,14 @@ def main() -> None:
     app = QApplication(sys.argv)
     app.setApplicationName(cfg.title)
     app.setApplicationVersion(cfg.version)
+
+    if config_error is not None:
+        QMessageBox.warning(
+            None,
+            "Configuration error",
+            "config.yaml could not be loaded, using default settings.\n\n"
+            f"{config_error}",
+        )
 
     # Apply theme stylesheet (respects background → dark/light mode)
     app.setStyleSheet(build_app_stylesheet(cfg))

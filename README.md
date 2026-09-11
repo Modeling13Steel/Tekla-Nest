@@ -117,4 +117,5 @@ make binary           # Standalone executable (PyInstaller)
 make binary-admin     # Standalone admin executable
 make installers       # Separate customer + admin Windows installers
 make infrastructure-package  # Separate license-server infrastructure zip
+make deploy-infrastructure   # Deploy license-server Firebase infra (see license-server/GUIDE.md)
 ```

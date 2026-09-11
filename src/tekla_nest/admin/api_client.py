@@ -26,17 +26,23 @@ class AdminApiClient:
         self.admin_key = admin_key.strip()
         self.timeout = timeout
 
-    def request(self, method: str, path: str, **kwargs: object) -> dict[str, Any]:
+    def request(
+        self, method: str, path: str, *, extra_headers: dict[str, str] | None = None, **kwargs: object
+    ) -> dict[str, Any]:
         if not self.server_url:
             raise AdminClientError("License server URL is required")
         if not self.admin_key:
             raise AdminClientError("Admin API key is required")
 
+        headers = self._headers()
+        if extra_headers:
+            headers.update(extra_headers)
+
         try:
             response = requests.request(
                 method,
                 self._url(path),
-                headers=self._headers(),
+                headers=headers,
                 timeout=self.timeout,
                 **kwargs,
             )
@@ -74,7 +80,7 @@ class AdminApiClient:
         ]
 
     def status(self, license_key: str) -> LicenseRecord:
-        data = self.request("GET", "admin_status", params={"key": license_key})
+        data = self.request("GET", "admin_status", extra_headers={"X-License-Key": license_key})
         return LicenseRecord.from_api(data)
 
     def revoke(self, license_key: str) -> dict[str, Any]:

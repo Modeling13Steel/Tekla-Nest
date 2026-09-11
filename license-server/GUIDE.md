@@ -16,7 +16,7 @@ The license system has two parts:
    - Firestore stores license records and machine bindings.
    - Firebase Functions secrets store signing and admin credentials.
 
-No Terraform or separate Google Cloud CLI flow is required for normal operation.
+No separate Google Cloud CLI flow is required for normal (day-to-day) operation. `license-server/terraform/` is an optional, one-time alternative to the manual `gcloud`/Console steps in **Initial Firebase setup** below — it enables the required GCP APIs, creates the Firestore database, and provisions the Functions service account and secret placeholders. It is not run automatically by `make`; use it instead of the manual steps if you prefer IaC for initial project bootstrap.
 
 ## Secrets
 
@@ -92,6 +92,31 @@ Firebase stores the live server data:
 | Logs | Errors, deploy events, startup events, function failures |
 
 Admins should not edit secrets by hand unless rotating keys. Editing Firestore records manually should be rare; prefer the admin CLI.
+
+## Automated deploy
+
+`scripts/deploy.py` automates everything below (tool install, login, one-time
+bootstrap, deploy) and works on macOS, Linux, and Windows:
+
+```bash
+python3.12 scripts/deploy.py
+```
+
+From the repo root on macOS/Linux you can also run it via:
+
+```bash
+make deploy-infrastructure
+```
+
+`make` is not native on Windows, so Windows users should run the script
+directly with `python3.12 scripts/deploy.py` from `license-server/` (Git Bash
+or WSL also work if you prefer the `make` target there).
+
+It prompts before installing missing CLIs or creating secrets. Use
+`--deploy-only` for a routine redeploy once bootstrap is done, or `--yes` to
+skip prompts (e.g. in CI). Run `python3.12 scripts/deploy.py --help` for all
+options. The sections below describe what the script does step by step, and
+remain the manual/troubleshooting reference.
 
 ## Initial Firebase setup
 
@@ -864,13 +889,26 @@ license-server/
 ├── scripts/
 │   ├── admin_cli.py
 │   ├── bootstrap_functions_venv.py
+│   ├── deploy.py
 │   └── generate_keys.py
+├── terraform/          # optional IaC alternative to manual gcloud setup
+│   ├── main.tf
+│   ├── variables.tf
+│   ├── outputs.tf
+│   └── terraform.tfvars.example
 └── .gitignore
 
 src/tekla_nest/
 ├── licensing/
 │   ├── __init__.py
+│   ├── activation_client.py
+│   ├── license_crypto.py
 │   ├── license_manager.py
+│   ├── license_validator.py
+│   ├── machine_id.py
+│   ├── models.py
+│   ├── self_integrity.py
+│   ├── requirements.txt
 │   └── public_key.pem
 └── views/
     └── activation_dialog.py
