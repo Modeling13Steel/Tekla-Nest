@@ -40,5 +40,5 @@ csv:
 
 licensing:
    required: true
-   server_url: "https://europe-west1-teklanest-d2699.cloudfunctions.net"
-   revalidation_days: 0
+   server_url: "https://europe-west1-tekla-nest.cloudfunctions.net/"
+   revalidation_days: 30
