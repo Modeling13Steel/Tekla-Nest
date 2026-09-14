@@ -28,7 +28,7 @@ T = TypeVar("T")
 
 
 @dataclass(frozen=True)
-class ColumnDefinition[T]:
+class ColumnDefinition:
     header: str
     getter: Callable[[T], object]
     setter: Callable[[T, object], None]
@@ -45,7 +45,7 @@ class ColumnDefinition[T]:
         return tr(self.description_key) if self.description_key else self.description
 
 
-class EditableTableModel[T](QAbstractTableModel):
+class EditableTableModel(QAbstractTableModel):
     """Editable table model backed by a list of dataclass-like rows."""
 
     validation_failed = Signal(str)
@@ -72,7 +72,7 @@ class EditableTableModel[T](QAbstractTableModel):
         self._data.append(row_data)
         self.endInsertRows()
 
-    def get_data(self) -> list[T]:
+    def get_data(self) -> list:
         return list(self._data)
 
     def clear(self) -> None:
@@ -153,7 +153,7 @@ class EditableTableModel[T](QAbstractTableModel):
 
 
 
-class DataTableWidget[T](QWidget):
+class DataTableWidget(QWidget):
     """Reusable table shell with title, search, state, and selection summary."""
 
     rows_deleted = Signal(int)  # Feedback #2 — count of rows just removed.
@@ -284,7 +284,7 @@ class DataTableWidget[T](QWidget):
         self._update_state()
 
     @property
-    def source_model(self) -> EditableTableModel[T]:
+    def source_model(self) -> EditableTableModel:
         return self._source_model
 
     @property
@@ -321,7 +321,7 @@ class DataTableWidget[T](QWidget):
             self._refresh_material_chips(self._source_model.get_data())
         self._update_state()
 
-    def get_rows(self) -> list[T]:
+    def get_rows(self) -> list:
         return self._source_model.get_data()
 
     def clear(self) -> None:

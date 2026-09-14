@@ -394,6 +394,10 @@ admin:
       text: Release all machines
       status: Release all machine bindings for the selected license.
       toolbar: Release all
+    delete:
+      text: Delete license
+      status: Permanently delete the selected revoked or expired license.
+      toolbar: Delete
   status:
     ready: Enter the license server URL and admin key to begin.
     loading: Contacting the license server...
@@ -408,6 +412,8 @@ admin:
     status_loaded: Latest license status loaded.
     key_copied: License key copied to the clipboard.
     already_revoked: This license is already revoked.
+    deleted: License deleted.
+    cannot_delete: Only revoked or expired licenses can be deleted.
   errors:
     server_url_required: Enter the license server URL.
     server_url_invalid: License server URL must start with http:// or https://.
@@ -463,6 +469,8 @@ admin:
     release_all_message: "Release all machine bindings for {customer}?\n\nKey: {key}\n\nThe customer may need to reactivate."
     release_machine_title: Release machine
     release_machine_message: "Release machine {machine} from {customer}?\n\nThe customer may need to reactivate."
+    delete_title: Delete license
+    delete_message: "Permanently delete the license for {customer}?\n\nKey: {key}\n\nThis cannot be undone."
 
 tables:
   common:

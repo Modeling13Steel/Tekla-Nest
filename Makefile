@@ -16,8 +16,8 @@ install-dev: ## Install project + dev dependencies (pytest, pytest-qt)
 	uv pip install -e ".[dev]"
 
 .PHONY: install-all
-install-all: ## Install everything (dev + pdf + tekla on Windows)
-	uv pip install -e ".[dev,pdf]"
+install-all: ## Install everything (dev + tekla on Windows)
+	uv pip install -e ".[dev,tekla]"
 
 # ── Run ──────────────────────────────────────────────────────
 

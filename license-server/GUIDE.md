@@ -88,7 +88,7 @@ Firebase stores the live server data:
 | --- | --- |
 | Firestore `licenses` collection | License keys, customer names, expiry dates, machine bindings, revoked flag |
 | Functions secrets | `JWT_PRIVATE_KEY`, `ADMIN_API_KEY`, `MASTER_ADMIN_API_KEY` |
-| Functions / Cloud Run | Deployed endpoints: `activate`, `validate`, `admin_create`, `admin_list`, `admin_release`, `admin_revoke`, `admin_status` |
+| Functions / Cloud Run | Deployed endpoints: `activate`, `validate`, `admin_create`, `admin_list`, `admin_release`, `admin_revoke`, `admin_delete`, `admin_status` |
 | Logs | Errors, deploy events, startup events, function failures |
 
 Admins should not edit secrets by hand unless rotating keys. Editing Firestore records manually should be rare; prefer the admin CLI.
@@ -101,6 +101,12 @@ bootstrap, deploy) and works on macOS, Linux, and Windows:
 ```bash
 python3.12 scripts/deploy.py
 ```
+
+!!! note "Windows: use the `py` launcher"
+    Windows doesn't ship a `python3.12` command. Everywhere this guide shows
+    `python3.12 ...`, run `py -3.12 ...` instead (see
+    [Getting started](../docs/getting-started.md#4-windows-notes-path-shims-venvs)
+    for why, and how to confirm which Python versions you have installed).
 
 From the repo root on macOS/Linux you can also run it via:
 

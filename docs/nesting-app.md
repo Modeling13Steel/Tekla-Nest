@@ -35,14 +35,15 @@ produces a printable cutting plan.
 Prerequisites: **Python 3.12**, **uv**, **Git** (see [Getting started](getting-started.md)).
 
 ```bash
-# from the tekla_package/ folder
-make bootstrap     # one-time: install everything
-make run           # launch the Nesting app  (= uv run tekla-nest)
+# from the repository root
+make install        # one-time: install runtime dependencies
+make run            # launch the Nesting app  (= uv run tekla-nest)
 ```
 
 | Command | Does |
 |---|---|
-| `make bootstrap` | Install all parts + tools. |
+| `make install` | Install runtime dependencies. |
+| `make install-dev` | Install dev tools too (pytest, ruff). |
 | `make run` | Launch the Nesting app. |
 | `make test` | Run the tests. |
 | `make lint` | Check code style. |
@@ -58,15 +59,17 @@ PC yourself:
 2. When it finishes, download **`tekla-nest-setup.exe`** from the workflow's *Artifacts*
    (a tagged run also attaches it to the GitHub *Release*).
 
-!!! warning
+!!! note
     The installer **cannot** be built on macOS or Linux. Use the GitHub Action (or a
-    Windows machine with Inno Setup). This workflow is a port of the original build and
-    should be validated once on a Windows runner — see [For developers](development.md).
+    Windows machine with Inno Setup + `make python-embed`) — see
+    [For developers](development.md) and
+    [Getting started](getting-started.md#4-windows-notes-path-shims-venvs) for the
+    Windows-specific tooling (Inno Setup, the bundled Python "shim").
 
 ## Troubleshooting
 
 | Symptom | Cause / fix |
 |---|---|
 | *Import from Tekla* is greyed out | Tekla integration needs **Windows + Tekla Structures (2021–2026)** running. On other systems, use **Load CSV**. |
-| App won't start after building from source | Run `make bootstrap` again; confirm Python 3.12. |
+| App won't start after building from source | Run `make install` again; confirm Python 3.12 (`python --version`, or `py -0p` on Windows). |
 | Asks for a licence | Get a key from an administrator ([Admin console](admin-console.md)). |
