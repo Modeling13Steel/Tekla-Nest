@@ -1,0 +1,1031 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Install, build, deploy and administer the Tekla Nest product family.">
+      
+      
+      
+      
+        <link rel="prev" href="../admin-console/">
+      
+      
+        <link rel="next" href="../development/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Infrastructure (license server) - Tekla Nest — Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#infrastructure-license-server" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Tekla Nest — Documentation" class="md-header__button md-logo" aria-label="Tekla Nest — Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Tekla Nest — Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Infrastructure (license server)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Tekla Nest — Documentation" class="md-nav__button md-logo" aria-label="Tekla Nest — Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Tekla Nest — Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nesting-app/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nesting app
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../admin-console/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin console
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infrastructure (license server)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infrastructure (license server)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-what-it-is-plain-words" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. What it is (plain words)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-accounts-to-create" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Accounts to create
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-tools-to-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Tools to install
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-deploy-roadmap-do-these-in-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Deploy roadmap (do these in order)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-environment-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Environment / configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-common-deploy-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Common deploy problems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-after-deploying" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. After deploying
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-secrets-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Secrets &amp; security
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-about-the-automated-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. About the automated checks
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    For developers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/v2.1.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.1.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-what-it-is-plain-words" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. What it is (plain words)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-accounts-to-create" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Accounts to create
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-tools-to-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Tools to install
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-deploy-roadmap-do-these-in-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Deploy roadmap (do these in order)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-environment-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Environment / configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-common-deploy-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Common deploy problems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-after-deploying" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. After deploying
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-secrets-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Secrets &amp; security
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-about-the-automated-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. About the automated checks
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="infrastructure-license-server">Infrastructure (license server)<a class="headerlink" href="#infrastructure-license-server" title="Permanent link">&para;</a></h1>
+<p>This is the small <strong>cloud service</strong> that checks whether a Tekla Nest licence is valid. You
+deploy it <strong>once</strong>. After that it mostly runs itself.</p>
+<div class="admonition note">
+<p class="admonition-title">You only need this if you run your own license server</p>
+<p>If someone already deployed it and gave you a server address, you can skip to
+<a href="#7-after-deploying">After deploying</a>. This page is for the person doing the one-time setup.</p>
+</div>
+<h2 id="1-what-it-is-plain-words">1. What it is (plain words)<a class="headerlink" href="#1-what-it-is-plain-words" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>Desktop apps  ──HTTPS──►  License server (Firebase Cloud Functions)  ──►  Firestore database
+(Nesting / Admin)          /activate  /validate  /admin_*                 (stores licences)
+</code></pre></div>
+<ul>
+<li><strong>Firebase / Google Cloud</strong> — Google's cloud platform. "Firebase" is the friendly layer on
+  top of Google Cloud.</li>
+<li><strong>Cloud Functions</strong> — small programs that run on demand in the cloud (our 7 endpoints).</li>
+<li><strong>Firestore</strong> — the cloud database that stores the licence records.</li>
+<li><strong>Secret Manager</strong> — a safe place for the secret keys.</li>
+<li><strong>Terraform</strong> — an optional tool that can create the cloud pieces from a script.</li>
+</ul>
+<p>At the small volumes this service handles, the cost is <strong>effectively €0</strong> (free tier); a
+payment card is still required on the account.</p>
+<h2 id="2-accounts-to-create">2. Accounts to create<a class="headerlink" href="#2-accounts-to-create" title="Permanent link">&para;</a></h2>
+<ol>
+<li>A <strong>Google account</strong> (if you don't have one).</li>
+<li>A <strong>Firebase project</strong> at <a href="https://console.firebase.google.com">https://console.firebase.google.com</a> → <em>Add project</em>.</li>
+<li><strong>Enable billing</strong> on that project (Google Cloud → Billing). Cloud Functions require the
+   pay-as-you-go <strong>Blaze</strong> plan, which needs a card — but usage stays within the free tier.</li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Keep the project ID handy (e.g. <code>tekla-nest-licences</code>). You'll use it in the commands
+below wherever it says <code>&lt;project-id&gt;</code>.</p>
+</div>
+<h2 id="3-tools-to-install">3. Tools to install<a class="headerlink" href="#3-tools-to-install" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Install</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Node.js + Firebase CLI</strong></td>
+<td>Node from <a href="https://nodejs.org">https://nodejs.org</a>, then <code>npm install -g firebase-tools</code></td>
+</tr>
+<tr>
+<td><strong>Google Cloud CLI (<code>gcloud</code>)</strong></td>
+<td><a href="https://cloud.google.com/sdk/docs/install">https://cloud.google.com/sdk/docs/install</a></td>
+</tr>
+<tr>
+<td><strong>Python 3.12</strong></td>
+<td><a href="https://www.python.org/downloads/">https://www.python.org/downloads/</a></td>
+</tr>
+<tr>
+<td><strong>Terraform</strong> <em>(optional)</em></td>
+<td><a href="https://developer.hashicorp.com/terraform/install">https://developer.hashicorp.com/terraform/install</a></td>
+</tr>
+</tbody>
+</table>
+<p>All commands below run from the <strong><code>license-server/</code></strong> folder.</p>
+<h2 id="4-deploy-roadmap-do-these-in-order">4. Deploy roadmap (do these in order)<a class="headerlink" href="#4-deploy-roadmap-do-these-in-order" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This mirrors the authoritative runbook, <code>license-server/GUIDE.md</code>. If anything here differs,
+the GUIDE is the source of truth.</p>
+</div>
+<p><strong>Step 1 — Sign in</strong>
+<div class="highlight"><pre><span></span><code>firebase<span class="w"> </span>login
+gcloud<span class="w"> </span>auth<span class="w"> </span>login
+<span class="nb">export</span><span class="w"> </span><span class="nv">PROJECT_ID</span><span class="o">=</span><span class="s2">"&lt;project-id&gt;"</span>
+</code></pre></div></p>
+<p><strong>Step 2 — Turn on the database</strong>
+<div class="highlight"><pre><span></span><code>gcloud<span class="w"> </span>services<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>firestore.googleapis.com<span class="w"> </span>--project<span class="o">=</span><span class="s2">"</span><span class="nv">$PROJECT_ID</span><span class="s2">"</span>
+gcloud<span class="w"> </span>firestore<span class="w"> </span>databases<span class="w"> </span>create<span class="w"> </span>--location<span class="o">=</span>eur3<span class="w"> </span>--project<span class="o">=</span><span class="s2">"</span><span class="nv">$PROJECT_ID</span><span class="s2">"</span>
+</code></pre></div></p>
+<p><strong>Step 3 — Generate the signing keys</strong> (creates <code>keys/private_key.pem</code> + <code>keys/public_key.pem</code>)
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>scripts/generate_keys.py
+</code></pre></div></p>
+<div class="admonition warning">
+<p class="admonition-title">Never share or commit the private key</p>
+<p><code>keys/private_key.pem</code> lets the server issue licences — treat it like a master password.
+Only the <strong>public</strong> key is embedded in the desktop app.</p>
+</div>
+<p><strong>Step 4 — Prepare the Functions environment</strong> (the Firebase CLI expects a local venv)</p>
+<p>This script requires exactly <strong>Python 3.12</strong>.</p>
+<div class="highlight"><pre><span></span><code>python3.12<span class="w"> </span>scripts/bootstrap_functions_venv.py
+</code></pre></div>
+<p>On Windows, <code>python3.12</code> is usually not on PATH — use the launcher instead:
+<div class="highlight"><pre><span></span><code><span class="n">py</span> <span class="p">-</span><span class="n">3</span><span class="p">.</span><span class="n">12</span> <span class="n">scripts</span><span class="p">\</span><span class="n">bootstrap_functions_venv</span><span class="p">.</span><span class="n">py</span>
+</code></pre></div>
+(see <a href="../getting-started/#4-windows-notes-path-shims-venvs">Getting started</a>).</p>
+<p><strong>Step 5 — Store the three secrets</strong>
+<div class="highlight"><pre><span></span><code>firebase<span class="w"> </span>functions:secrets:set<span class="w"> </span>JWT_PRIVATE_KEY<span class="w"> </span>&lt;<span class="w"> </span>keys/private_key.pem
+<span class="nb">printf</span><span class="w"> </span><span class="s2">"%s"</span><span class="w"> </span><span class="s2">"&lt;your-admin-key&gt;"</span><span class="w">  </span><span class="p">|</span><span class="w"> </span>firebase<span class="w"> </span>functions:secrets:set<span class="w"> </span>ADMIN_API_KEY
+<span class="nb">printf</span><span class="w"> </span><span class="s2">"%s"</span><span class="w"> </span><span class="s2">"&lt;your-master-key&gt;"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>firebase<span class="w"> </span>functions:secrets:set<span class="w"> </span>MASTER_ADMIN_API_KEY
+</code></pre></div></p>
+<p><strong>Step 6 — Deploy the server</strong>
+<div class="highlight"><pre><span></span><code>firebase<span class="w"> </span>deploy<span class="w"> </span>--only<span class="w"> </span>functions
+</code></pre></div></p>
+<p>When it finishes, Firebase prints the <strong>function URLs</strong> — note the base address, e.g.
+<code>https://europe-west1-&lt;project-id&gt;.cloudfunctions.net</code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Optional: Terraform instead of manual setup</p>
+<p>Steps 2 and part of 5 can be provisioned with Terraform (Firestore, Secret Manager, IAM):
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>terraform
+cp<span class="w"> </span>terraform.tfvars.example<span class="w"> </span>terraform.tfvars<span class="w">   </span><span class="c1"># fill in project_id, region, firestore_location</span>
+terraform<span class="w"> </span>init<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>terraform<span class="w"> </span>apply
+</code></pre></div>
+The Functions themselves are still deployed with <code>firebase deploy</code> (Step 6).</p>
+</div>
+<h2 id="5-environment-configuration">5. Environment / configuration<a class="headerlink" href="#5-environment-configuration" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Where</th>
+<th>Setting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>terraform/terraform.tfvars</code></td>
+<td><code>project_id</code>, <code>region</code>, <code>firestore_location</code></td>
+</tr>
+<tr>
+<td><code>.firebaserc</code></td>
+<td>the Firebase project alias</td>
+</tr>
+<tr>
+<td><code>functions/main.py</code></td>
+<td>function region (default <code>europe-west1</code>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-common-deploy-problems">6. Common deploy problems<a class="headerlink" href="#6-common-deploy-problems" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Fix (from GUIDE.md)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deploy fails on a brand-new project (build service account permission)</td>
+<td>Grant the Cloud Build role: <code>gcloud projects add-iam-policy-binding "$PROJECT_ID" --member=... --role="roles/cloudbuild.builds.builder"</code>, then redeploy.</td>
+</tr>
+<tr>
+<td><code>/activate</code> returns <strong>403</strong> after deploy</td>
+<td>Allow public invocation: <code>gcloud run services add-iam-policy-binding activate --member="allUsers" --role="roles/run.invoker" ...</code>.</td>
+</tr>
+<tr>
+<td>Deploy fails: missing <code>functions/venv</code></td>
+<td>Re-run <strong>Step 4</strong> (<code>bootstrap_functions_venv.py</code>).</td>
+</tr>
+</tbody>
+</table>
+<p>See <code>license-server/GUIDE.md</code> for the exact troubleshooting commands.</p>
+<h2 id="7-after-deploying">7. After deploying<a class="headerlink" href="#7-after-deploying" title="Permanent link">&para;</a></h2>
+<p>Point the desktop apps at your server: set <strong><code>licensing.server_url</code></strong> in the
+repository root's <strong><code>config.yaml</code></strong> to the base URL from Step 6. Then use the
+<a href="../admin-console/">Admin console</a> to issue licences.</p>
+<h2 id="8-secrets-security">8. Secrets &amp; security<a class="headerlink" href="#8-secrets-security" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Secret</th>
+<th>Purpose</th>
+<th>Storage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JWT_PRIVATE_KEY</code></td>
+<td>Signs licence tokens</td>
+<td>Firebase secret; generated locally; <strong>never commit</strong></td>
+</tr>
+<tr>
+<td><code>ADMIN_API_KEY</code></td>
+<td>Normal admin operations</td>
+<td>Team password vault</td>
+</tr>
+<tr>
+<td><code>MASTER_ADMIN_API_KEY</code></td>
+<td>Emergency break-glass</td>
+<td>Separate restricted vault</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>keys/*.pem</code> are git-ignored — never commit them.</li>
+<li>Rotate keys per the runbook if exposed.</li>
+</ul>
+<h2 id="9-about-the-automated-checks">9. About the automated checks<a class="headerlink" href="#9-about-the-automated-checks" title="Permanent link">&para;</a></h2>
+<p>There is currently <strong>no automated CI validation</strong> for the Terraform/Functions code (no
+<code>iac.yml</code> workflow exists yet) — <code>terraform fmt</code>/<code>validate</code> and any Functions syntax checks
+must be run manually before deploying. Deployment itself is always the manual, operator-run
+process above (or <code>license-server/scripts/deploy.py</code>, see <code>license-server/GUIDE.md</code>) — CI
+never deploys infrastructure automatically.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

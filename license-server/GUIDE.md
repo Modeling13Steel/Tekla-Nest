@@ -153,7 +153,7 @@ In the Firebase Console:
 CLI equivalent:
 
 ```bash
-PROJECT_ID="teklanest-d2699"
+PROJECT_ID="tekla-nest"
 
 gcloud services enable firestore.googleapis.com --project="$PROJECT_ID"
 gcloud firestore databases create \
@@ -265,6 +265,110 @@ If deployment partially succeeds, do not enable the desktop activation prompt un
 - `/activate`
 - `/validate`
 
+## CI/CD pipeline setup
+
+`.github/workflows/license-server-deploy.yml` validates the required secrets
+and deploys the Cloud Functions automatically on every push that touches
+`license-server/**`, plus manual `workflow_dispatch`. It authenticates to GCP
+using OIDC / Workload Identity Federation — **no service-account JSON key is
+ever generated or stored as a GitHub secret**.
+
+The pipeline never creates, rotates, or reads the *value* of a secret. If
+`JWT_PRIVATE_KEY`, `ADMIN_API_KEY`, or `MASTER_ADMIN_API_KEY` is missing or has
+no enabled version, the `validate-keys` job fails immediately with a clear
+log message instead of deploying — provision them once with
+`python3.12 scripts/deploy.py` (or the manual steps above) first.
+
+### One-time bootstrap: GitHub OIDC → GCP
+
+Run this once, locally, with an authenticated `gcloud` session that has
+`roles/iam.securityAdmin` (or `Owner`) on the project — it is plain `gcloud`,
+**Terraform is not required**:
+
+```bash
+cd license-server
+python3.12 scripts/setup_github_oidc.py --set-github-vars
+```
+
+`--repo` is optional — it auto-detects `OWNER/REPO` from the current clone
+via `gh repo view` (pass `--repo OWNER/REPO` explicitly if you're not inside
+that clone, e.g. running from CI).
+
+(or `make setup-github-oidc` from the repo root on macOS/Linux; run the script directly on Windows.)
+
+This creates, idempotently:
+
+| Object | Name | Purpose |
+| --- | --- | --- |
+| Workload Identity Pool | `github-actions-pool` | Trust anchor for GitHub's OIDC tokens |
+| OIDC provider (in the pool) | `github-provider` | Issuer `token.actions.githubusercontent.com`, restricted to `Modeling13Steel/Tekla-Nest` only (no branch restriction — the GitHub Environment approval gate below is what limits *when* a deploy actually runs) |
+| Service account | `github-deployer@<project-id>.iam.gserviceaccount.com` | Identity GitHub Actions impersonates; granted `roles/cloudfunctions.developer`, `roles/run.developer`, `roles/secretmanager.viewer` (metadata/existence only, never `secretAccessor`), `roles/artifactregistry.writer`, `roles/cloudbuild.builds.editor`, plus `roles/iam.serviceAccountUser` scoped to the `license-functions` runtime service account |
+| IAM binding | `roles/iam.workloadIdentityUser` on `github-deployer` | Lets the pinned GitHub repo impersonate the deployer SA |
+
+Drop `--set-github-vars` if you don't have `gh` installed/authenticated; the
+script prints the three values to set manually instead (**Settings → Secrets
+and variables → Actions → Variables** — these are not secrets):
+
+- `GCP_PROJECT_ID`
+- `GCP_WORKLOAD_IDENTITY_PROVIDER`
+- `GCP_DEPLOYER_SA_EMAIL`
+
+### One-time bootstrap: require manual approval before deploy
+
+The `deploy-functions` job targets a GitHub Environment named
+`license-server-deploy`, which must exist **before the first workflow run** —
+if it doesn't, GitHub auto-creates it with no protection rules, and deploys
+would go out with **no approval gate at all**.
+
+The same command above already handles this — by default it auto-infers
+required reviewers (the repo's admin collaborators + the current `gh` user)
+and creates/updates the environment. Reviewers are GitHub **users only**
+(no teams — this repo isn't part of an org, so teams don't apply). To pick
+reviewers explicitly instead of auto-inferring:
+
+```bash
+python3.12 scripts/setup_github_oidc.py --set-github-vars --reviewer alice --reviewer bob
+```
+
+Pass `--no-reviewers` to skip this step and configure the environment
+manually instead: **Settings → Environments → New environment**, name it
+exactly `license-server-deploy`, and add at least one required reviewer.
+
+### Re-running the bootstrap: `--force` and `--destroy`
+
+Every resource the bootstrap creates is idempotent — re-running the plain
+command above is always safe and just verifies/skips what already exists.
+Two flags change that behavior:
+
+- **`--force`** — if a resource already exists, reconcile it with the
+  current settings instead of silently leaving it alone. In practice this
+  only matters for the OIDC provider, whose `--attribute-condition` locks it
+  to a single repo (e.g. after changing `--repo`, or renaming the repo). With
+  `--force`, an existing provider prompts before updating its repo lock in
+  place; the pool/service account/IAM bindings have nothing meaningful to
+  reconcile, so `--force` is a no-op for them.
+- **`--destroy`** — tears the whole bootstrap back down: the deployer
+  service account and its IAM bindings, the OIDC provider, the workload
+  identity pool, the `license-server-deploy` environment, and the three
+  `GCP_*` repo variables. Prompts for confirmation (skip with `--yes`).
+  GCP soft-deletes pools/providers with a **~30-day grace period** — you
+  can't immediately re-run the plain bootstrap afterward with the same IDs
+  until that window elapses (or you `gcloud iam workload-identity-pools
+  undelete`).
+
+```bash
+python3.12 scripts/setup_github_oidc.py --force      # e.g. after changing --repo
+python3.12 scripts/setup_github_oidc.py --destroy    # tear it all down
+```
+
+### If the pipeline fails to authenticate
+
+The `validate-keys` and `deploy-functions` jobs both log
+`::error::Could not authenticate to GCP via OIDC` and stop before touching
+anything if the OIDC exchange fails. This almost always means the bootstrap
+above hasn't been run yet (or the repo variables are unset/stale) — re-run
+`scripts/setup_github_oidc.py` and re-trigger the workflow.
+
 ## Troubleshooting deploys
 
 ### Missing build service account permission
@@ -280,7 +384,7 @@ This can happen on new Firebase projects after Cloud Functions, Cloud Build, Clo
 The build service account needs the Cloud Build Service Account role. For the project from the deploy output:
 
 ```bash
-PROJECT_ID="teklanest-d2699"
+PROJECT_ID="tekla-nest"
 PROJECT_NUMBER="228361706735"
 BUILD_SA="${PROJECT_NUMBER}-compute@developer.gserviceaccount.com"
 
@@ -327,7 +431,7 @@ This means the Cloud Run service exists but unauthenticated clients cannot invok
 Fix:
 
 ```bash
-PROJECT_ID="teklanest-d2699"
+PROJECT_ID="tekla-nest"
 
 gcloud run services add-iam-policy-binding activate \
   --project="$PROJECT_ID" \
@@ -339,7 +443,7 @@ gcloud run services add-iam-policy-binding activate \
 Verify:
 
 ```bash
-curl https://europe-west1-teklanest-d2699.cloudfunctions.net/activate
+curl https://europe-west1-tekla-nest.cloudfunctions.net/activate
 ```
 
 Expected response for a GET request:
@@ -363,14 +467,14 @@ Check function logs:
 gcloud functions logs read admin_list \
   --gen2 \
   --region=europe-west1 \
-  --project=teklanest-d2699 \
+  --project=tekla-nest \
   --limit=30
 ```
 
 If logs say `Cloud Firestore API has not been used... or it is disabled`, enable Firestore and create the default database:
 
 ```bash
-PROJECT_ID="teklanest-d2699"
+PROJECT_ID="tekla-nest"
 
 gcloud services enable firestore.googleapis.com --project="$PROJECT_ID"
 gcloud firestore databases create \
@@ -518,13 +622,13 @@ Checks:
 1. Verify the server URL in `config.yaml`:
 
    ```yaml
-   server_url: "https://europe-west1-teklanest-d2699.cloudfunctions.net"
+   server_url: "https://europe-west1-tekla-nest.cloudfunctions.net"
    ```
 
 2. Check that `/activate` reaches the function:
 
    ```bash
-   curl https://europe-west1-teklanest-d2699.cloudfunctions.net/activate
+   curl https://europe-west1-tekla-nest.cloudfunctions.net/activate
    ```
 
    Expected GET response:
@@ -619,7 +723,7 @@ First checks:
 gcloud functions logs read admin_list \
   --gen2 \
   --region=europe-west1 \
-  --project=teklanest-d2699 \
+  --project=tekla-nest \
   --limit=30
 ```
 
@@ -630,8 +734,8 @@ If logs mention Firestore, follow the Firestore setup in the troubleshooting sec
 Do not enable licensing in the desktop app until both customer endpoints work:
 
 ```bash
-curl https://europe-west1-teklanest-d2699.cloudfunctions.net/activate
-curl https://europe-west1-teklanest-d2699.cloudfunctions.net/validate
+curl https://europe-west1-tekla-nest.cloudfunctions.net/activate
+curl https://europe-west1-tekla-nest.cloudfunctions.net/validate
 ```
 
 Expected GET response for both:
@@ -649,7 +753,7 @@ If `/activate` returns an HTML 403 page, apply the `/activate` invoker fix in th
 1. Set environment variables:
 
    ```bash
-   export LICENSE_SERVER_URL="https://europe-west1-teklanest-d2699.cloudfunctions.net"
+   export LICENSE_SERVER_URL="https://europe-west1-tekla-nest.cloudfunctions.net"
    export ADMIN_API_KEY="<admin-key-from-vault>"
    ```
 
@@ -853,7 +957,7 @@ Firebase Functions runs on Google Cloud infrastructure. The day-to-day workflow 
 Use the shared Cloud Functions base URL:
 
 ```yaml
-server_url: "https://europe-west1-teklanest-d2699.cloudfunctions.net"
+server_url: "https://europe-west1-tekla-nest.cloudfunctions.net"
 ```
 
 Do not use a per-function `run.app` URL in the desktop app config.

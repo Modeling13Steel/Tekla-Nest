@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tekla Nest — UI Refresh 2026 (Mockups)</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="index-wrap">
+    <header class="index-hero">
+      <p style="color:var(--brand-accent); text-transform:uppercase; letter-spacing:0.08em; font-size:12px; font-weight:700; margin:0 0 8px;">UI Refresh · 2026</p>
+      <h1>Tekla Nest — Enhanced Mockups</h1>
+      <p>A non-breaking visual & interaction refresh of the existing PySide6 desktop shell. Same information architecture (Parts · Stock · Report), modern surfaces, denser data-viz, faster discovery via a command palette, and first-class dark mode.</p>
+    </header>
+
+    <section style="margin-top: var(--s-7);">
+      <h2 style="font-size:18px; letter-spacing:-0.01em; margin:0 0 var(--s-4);">2026 trends applied</h2>
+      <div class="index-cards">
+        <article class="index-card">
+          <h3>Bento KPI hero</h3>
+          <p>Surface the optimization outcome (overall waste %, bars used, unfit pieces, profiles covered) above the workspace — replacing the single "% waste" line in the report.</p>
+          <div class="tags"><span>Bento</span><span>Glanceable</span><span>Linear / Notion</span></div>
+        </article>
+
+        <article class="index-card">
+          <h3>Inline cut-bar visualization</h3>
+          <p>Each report row gets a small color-segmented bar showing cuts and waste in proportion. Industrial cutting needs spatial intuition, not just numbers.</p>
+          <div class="tags"><span>Data-viz</span><span>Tufte</span><span>Inline</span></div>
+        </article>
+
+        <article class="index-card">
+          <h3>Command palette (Ctrl+K)</h3>
+          <p>Search-driven access to every action — Load CSV, Auto-Stock, Clear Parts, Calculate, Export, language switch. Removes menu archaeology.</p>
+          <div class="tags"><span>Cmd+K</span><span>Discoverability</span><span>VS Code / Raycast</span></div>
+        </article>
+
+        <article class="index-card">
+          <h3>Soft elevation & glass chrome</h3>
+          <p>Replace hard 1px borders with layered shadows on rounded surfaces. Sticky top chrome uses a translucent backdrop-blur for context retention.</p>
+          <div class="tags"><span>Elevation</span><span>Glassmorphism</span><span>Material 3</span></div>
+        </article>
+
+        <article class="index-card">
+          <h3>Dark mode parity</h3>
+          <p>First-class dark theme using the same token names — no separate sheet. Long sessions in plant environments benefit from low-glare surfaces.</p>
+          <div class="tags"><span>Dark mode</span><span>Tokens</span><span>WCAG AA+</span></div>
+        </article>
+
+        <article class="index-card">
+          <h3>Insight cards (incl. unfit pieces)</h3>
+          <p>The new "partial result" path from the engine surfaces as an actionable card with the exact pieces that didn't fit and one-click remediation (add longer bar, split piece).</p>
+          <div class="tags"><span>Actionable</span><span>Microcopy</span><span>AI-assist style</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section style="margin-top: var(--s-7);">
+      <h2 style="font-size:18px; letter-spacing:-0.01em; margin:0 0 var(--s-4);">Mockups</h2>
+      <div class="index-cards">
+        <a class="index-card" href="./01-main-shell.html">
+          <h3>01 · Enhanced main workspace</h3>
+          <p>Top chrome with global search, KPI strip, three modernized panels (Parts, Stock with tabs + chips, Report Preview).</p>
+          <div class="tags"><span>Open mockup →</span></div>
+        </a>
+        <a class="index-card" href="./02-report-insights.html">
+          <h3>02 · Report &amp; insights view</h3>
+          <p>Full-width report with inline cut-bar visualizations per row, utilization heat, and a prominent "unfit pieces" insight card.</p>
+          <div class="tags"><span>Open mockup →</span></div>
+        </a>
+        <a class="index-card" href="./03-command-palette.html">
+          <h3>03 · Command palette (Ctrl+K)</h3>
+          <p>Search-driven action launcher overlay. Bilingual (EN / PT) labels resolved live from translation keys.</p>
+          <div class="tags"><span>Open mockup →</span></div>
+        </a>
+        <a class="index-card" href="./04-dark-mode.html">
+          <h3>04 · Dark mode</h3>
+          <p>The same workspace, rendered with the dark token set. No bespoke CSS — only the <code>data-theme</code> attribute changes.</p>
+          <div class="tags"><span>Open mockup →</span></div>
+        </a>
+      </div>
+    </section>
+
+    <section style="margin-top: var(--s-7); color: var(--text-muted); font-size: 12.5px;">
+      <p>These are static HTML/CSS mockups intended as a visual brief — they re-use the existing semantic tokens defined in <code>src/tekla_nest/design_system/tokens.py</code> so anything approved here is directly translatable to QSS. No production Python is changed.</p>
+    </section>
+  </div>
+</body>
+</html>

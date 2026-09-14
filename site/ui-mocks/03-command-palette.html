@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>03 · Command palette — Tekla Nest</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+  <!-- background = workspace (dimmed) -->
+  <header class="chrome">
+    <div class="chrome__row">
+      <div class="chrome__brand">
+        <div class="chrome__brand-mark">TN</div>
+        <div>
+          <div class="chrome__app-title">M13S Nest</div>
+          <div class="chrome__app-sub">Workspace</div>
+        </div>
+      </div>
+      <div class="chrome__spacer"></div>
+      <button class="btn btn--ghost">Load Parts</button>
+      <button class="btn btn--accent">Auto-Stock</button>
+      <button class="btn btn--primary">Calculate ▸</button>
+    </div>
+  </header>
+
+  <main class="workspace" style="filter: blur(2px) brightness(0.95); pointer-events: none;">
+    <section class="panel" style="height: 420px;"><div class="panel__head"><h2 class="panel__title">Parts</h2></div></section>
+    <section class="panel" style="height: 420px;"><div class="panel__head"><h2 class="panel__title">Stock</h2></div></section>
+    <section class="panel" style="height: 420px;"><div class="panel__head"><h2 class="panel__title">Report preview</h2></div></section>
+  </main>
+
+  <!-- Palette overlay -->
+  <div class="palette-mask" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="palette">
+      <div class="palette__input">
+        <span aria-hidden="true" style="font-size:20px; color: var(--text-muted);">⌕</span>
+        <input value="cle" placeholder="Type a command, file, or part mark…" autofocus>
+        <kbd>Esc</kbd>
+      </div>
+
+      <div class="palette__group" role="listbox">
+        <h4>Suggested</h4>
+        <div class="palette__item is-active" role="option" aria-selected="true">
+          <div class="glyph">⌫</div>
+          <div>
+            <div>Clear loaded parts</div>
+            <div class="desc">Undo CSV / Tekla load — empties the parts table · <span style="color:var(--brand-primary);">commands.clear_parts</span></div>
+          </div>
+          <kbd>Ctrl Shift Z</kbd>
+        </div>
+        <div class="palette__item" role="option">
+          <div class="glyph">⌖</div>
+          <div>
+            <div>Clear results</div>
+            <div class="desc">Discard the current nesting plan</div>
+          </div>
+          <kbd>Ctrl Shift R</kbd>
+        </div>
+      </div>
+
+      <div class="palette__group">
+        <h4>Actions</h4>
+        <div class="palette__item" role="option">
+          <div class="glyph">⇪</div>
+          <div>
+            <div>Load parts from CSV…</div>
+            <div class="desc">Import a parts list (.csv)</div>
+          </div>
+          <kbd>Ctrl O</kbd>
+        </div>
+        <div class="palette__item" role="option">
+          <div class="glyph">T</div>
+          <div>
+            <div>Load parts from Tekla</div>
+            <div class="desc">Pull selected parts from Tekla Structures</div>
+          </div>
+        </div>
+        <div class="palette__item" role="option">
+          <div class="glyph">＋</div>
+          <div>
+            <div>Auto-populate market stock</div>
+            <div class="desc">Generate default lengths × all materials for each profile</div>
+          </div>
+        </div>
+        <div class="palette__item" role="option">
+          <div class="glyph">▸</div>
+          <div>
+            <div>Calculate nesting plan</div>
+            <div class="desc">Run the FFD optimizer</div>
+          </div>
+          <kbd>Ctrl Enter</kbd>
+        </div>
+        <div class="palette__item" role="option">
+          <div class="glyph">⇩</div>
+          <div>
+            <div>Export report as PDF…</div>
+            <div class="desc">Save the current plan as a PDF</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="palette__group">
+        <h4>Settings</h4>
+        <div class="palette__item" role="option">
+          <div class="glyph">EN</div>
+          <div>
+            <div>Switch language to Português</div>
+            <div class="desc">Mudar para Português · live reload of all labels</div>
+          </div>
+        </div>
+        <div class="palette__item" role="option">
+          <div class="glyph">◐</div>
+          <div>
+            <div>Toggle dark mode</div>
+            <div class="desc">Low-glare surface for plant environments</div>
+          </div>
+          <kbd>Ctrl D</kbd>
+        </div>
+      </div>
+
+      <div style="padding: 10px var(--s-5); border-top: 1px solid var(--border-soft); display:flex; gap: var(--s-4); font-size: 11px; color: var(--text-muted);">
+        <span><kbd>↑↓</kbd> navigate</span>
+        <span><kbd>↵</kbd> select</span>
+        <span><kbd>Esc</kbd> close</span>
+        <span style="margin-left:auto;">Tip: prefix with <kbd>&gt;</kbd> for actions, <kbd>#</kbd> for part marks</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
