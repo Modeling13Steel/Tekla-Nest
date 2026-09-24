@@ -1,0 +1,1268 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Install, build, deploy and administer the Tekla Nest product family.">
+      
+      
+      
+      
+        <link rel="prev" href="../nesting-app/">
+      
+      
+        <link rel="next" href="../infrastructure/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Admin console - Tekla Nest — Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#tekla-nest-admin-console" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Tekla Nest — Documentation" class="md-header__button md-logo" aria-label="Tekla Nest — Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Tekla Nest — Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Admin console
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Tekla Nest — Documentation" class="md-nav__button md-logo" aria-label="Tekla Nest — Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Tekla Nest — Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nesting-app/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nesting app
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin console
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin console
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites-and-connection-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites and connection settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-run-or-install-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to run or install it
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to run or install it">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#run-from-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run from source
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-on-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install on Windows
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common tasks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-connect-to-the-licence-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Connect to the licence server
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-issue-a-licence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Issue a licence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-revoke-a-licence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Revoke a licence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-release-a-machine-binding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Release a machine binding
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-delete-a-licence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Delete a licence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-list-licences-and-check-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. List licences and check status
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#command-line-alternative" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command-line alternative
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#small-commands-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Small commands table
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../infrastructure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infrastructure (license server)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    For developers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/v2.1.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v2.1.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites-and-connection-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites and connection settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-run-or-install-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to run or install it
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to run or install it">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#run-from-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run from source
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-on-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install on Windows
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common tasks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-connect-to-the-licence-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Connect to the licence server
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-issue-a-licence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Issue a licence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-revoke-a-licence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Revoke a licence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-release-a-machine-binding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Release a machine binding
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-delete-a-licence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Delete a licence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-list-licences-and-check-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. List licences and check status
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#command-line-alternative" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command-line alternative
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#small-commands-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Small commands table
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="tekla-nest-admin-console">Tekla Nest Admin Console<a class="headerlink" href="#tekla-nest-admin-console" title="Permanent link">&para;</a></h1>
+<p>The <strong>Tekla Nest Admin Console</strong> is a Windows desktop admin app for managing Tekla Nest software licences.</p>
+<p>It is for <strong>administrators and support staff</strong>, not end users. Use it to:</p>
+<ol>
+<li>Issue a new customer licence.</li>
+<li>Revoke a licence.</li>
+<li>Release a machine binding so a customer can activate again.</li>
+<li>Delete a revoked or expired licence record.</li>
+<li>List licences and check their current status.</li>
+</ol>
+<p>The console talks to the Tekla Nest licence server over HTTPS — the <code>license-server/</code> Firebase Functions service in this repository (see <a href="../infrastructure/">Infrastructure</a>).</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Licence key</td>
+<td>The key given to a customer so Tekla Nest can be activated.</td>
+</tr>
+<tr>
+<td>Admin API key</td>
+<td>A secret token that lets an administrator call admin endpoints on the licence server.</td>
+</tr>
+<tr>
+<td>Bearer token</td>
+<td>The admin key is sent in the HTTPS <code>Authorization: Bearer &lt;admin-key&gt;</code> header.</td>
+</tr>
+<tr>
+<td>Machine binding</td>
+<td>The server record that says a licence has been activated on a specific computer.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="prerequisites-and-connection-settings">Prerequisites and connection settings<a class="headerlink" href="#prerequisites-and-connection-settings" title="Permanent link">&para;</a></h2>
+<p>You need two values before the console can connect.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Where it comes from</th>
+<th>What the app does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Licence server URL</td>
+<td>The deployed Firebase Functions base URL, for example <code>https://europe-west1-&lt;project-id&gt;.cloudfunctions.net</code></td>
+<td>The GUI shows a <strong>License server URL</strong> field, pre-filled from the root <code>config.yaml</code>'s <code>licensing.server_url</code>; if blank or wrong, paste the URL manually. The app requires it to start with <code>http://</code> or <code>https://</code>.</td>
+</tr>
+<tr>
+<td><code>ADMIN_API_KEY</code></td>
+<td>The normal admin key stored as a Firebase Functions secret</td>
+<td>Paste it into the GUI <strong>Admin key</strong> field. The field is password-hidden. The GUI does not load it from an environment variable and does not save it for the next session.</td>
+</tr>
+</tbody>
+</table>
+<p>When you click <strong>Connect and refresh</strong> or <strong>Test connection</strong>, the app creates an API client with those two values. The client removes any trailing slash from the server URL and sends the key as:</p>
+<div class="highlight"><pre><span></span><code>Authorization: Bearer &lt;admin-key&gt;
+</code></pre></div>
+<p>The <strong>Using recovery key</strong> checkbox only shows a warning in the GUI. It does not change the request. If you paste the <code>MASTER_ADMIN_API_KEY</code>, the same admin-key field is used.</p>
+<h2 id="how-to-run-or-install-it">How to run or install it<a class="headerlink" href="#how-to-run-or-install-it" title="Permanent link">&para;</a></h2>
+<p>The admin console is <strong>part of the single <code>tekla-nest</code> package</strong> — not a separate workspace
+package. It lives in <code>src/tekla_nest/admin/</code> and shares config/i18n/branding with the nesting
+app.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python package</td>
+<td><code>tekla_nest</code> (submodule <code>tekla_nest.admin</code>)</td>
+</tr>
+<tr>
+<td>Entry point</td>
+<td><code>tekla-nest-admin</code></td>
+</tr>
+<tr>
+<td>Dev make target</td>
+<td><code>make run-admin</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="run-from-source">Run from source<a class="headerlink" href="#run-from-source" title="Permanent link">&para;</a></h3>
+<p>From the repository root:</p>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>install
+make<span class="w"> </span>run-admin
+</code></pre></div>
+<p><code>make run-admin</code> runs:</p>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>tekla-nest-admin
+</code></pre></div>
+<h3 id="install-on-windows">Install on Windows<a class="headerlink" href="#install-on-windows" title="Permanent link">&para;</a></h3>
+<p>For normal admin users, install the Windows setup file:</p>
+<div class="highlight"><pre><span></span><code>tekla-nest-admin-setup.exe
+</code></pre></div>
+<p>This installer is built by the GitHub Actions workflow <strong>Build Windows Packages</strong> on Windows (<code>make installer-admin</code> locally, which needs Inno Setup — see <a href="../getting-started/">Getting started</a>). It is packaged separately from:</p>
+<ul>
+<li>the customer-facing Tekla Nest app installer;</li>
+<li>the licence-server infrastructure bundle.</li>
+</ul>
+<h2 id="common-tasks">Common tasks<a class="headerlink" href="#common-tasks" title="Permanent link">&para;</a></h2>
+<h3 id="1-connect-to-the-licence-server">1. Connect to the licence server<a class="headerlink" href="#1-connect-to-the-licence-server" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Launch <strong>Tekla Nest Admin</strong>.</li>
+<li>Enter the licence server base URL.</li>
+<li>Paste the normal <code>ADMIN_API_KEY</code>.</li>
+<li>Click <strong>Connect and refresh</strong>.</li>
+<li>Confirm the licence table loads.</li>
+</ol>
+<p>For a connection-only check, click <strong>Test connection</strong>.</p>
+<h3 id="2-issue-a-licence">2. Issue a licence<a class="headerlink" href="#2-issue-a-licence" title="Permanent link">&para;</a></h3>
+<p>In the GUI:</p>
+<ol>
+<li>Click <strong>Create</strong>.</li>
+<li>Enter the customer or company name.</li>
+<li>Set <strong>Duration days</strong>.</li>
+<li>Default: <code>365</code> days.</li>
+<li>Allowed range in the GUI: <code>1</code> to <code>3650</code> days.</li>
+<li>Set <strong>Max machines</strong>.</li>
+<li>Default: <code>1</code> machine.</li>
+<li>Allowed range in the GUI: <code>1</code> to <code>25</code> machines.</li>
+<li>Click <strong>OK</strong>.</li>
+<li>The new licence key is copied to the clipboard.</li>
+<li>Send the licence key to the customer through the approved support channel.</li>
+</ol>
+<p>CLI equivalent, from <code>license-server/</code>:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>scripts/admin_cli.py<span class="w"> </span>create<span class="w"> </span>--customer<span class="w"> </span><span class="s2">"Acme Corporation"</span><span class="w"> </span>--days<span class="w"> </span><span class="m">365</span><span class="w"> </span>--machines<span class="w"> </span><span class="m">1</span>
+</code></pre></div>
+<h3 id="3-revoke-a-licence">3. Revoke a licence<a class="headerlink" href="#3-revoke-a-licence" title="Permanent link">&para;</a></h3>
+<p>Use this when a licence must no longer validate.</p>
+<p>In the GUI:</p>
+<ol>
+<li>Select the licence row.</li>
+<li>Click <strong>Revoke</strong>.</li>
+<li>Read the confirmation message.</li>
+<li>Confirm only if you are sure.</li>
+</ol>
+<p>CLI equivalent:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>scripts/admin_cli.py<span class="w"> </span>revoke<span class="w"> </span>--key<span class="w"> </span>&lt;license-key&gt;
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Revocation affects future online validation. If a customer is offline, the app may continue until its next required server validation.</p>
+</div>
+<h3 id="4-release-a-machine-binding">4. Release a machine binding<a class="headerlink" href="#4-release-a-machine-binding" title="Permanent link">&para;</a></h3>
+<p>Use this when a customer changes computer, reinstalls Windows, or needs to activate again.</p>
+<p>In the GUI, to release all machines for the selected licence:</p>
+<ol>
+<li>Select the licence row.</li>
+<li>Click <strong>Release all</strong>.</li>
+<li>Confirm the action.</li>
+<li>Ask the customer to activate again.</li>
+</ol>
+<p>To release one specific machine:</p>
+<ol>
+<li>Select the licence row.</li>
+<li>In <strong>License Detail</strong>, choose a machine under <strong>Machine to release</strong>.</li>
+<li>Click <strong>Release selected machine</strong>.</li>
+<li>Confirm the action.</li>
+</ol>
+<p>CLI equivalents:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>scripts/admin_cli.py<span class="w"> </span>release<span class="w"> </span>--key<span class="w"> </span>&lt;license-key&gt;
+python<span class="w"> </span>scripts/admin_cli.py<span class="w"> </span>release<span class="w"> </span>--key<span class="w"> </span>&lt;license-key&gt;<span class="w"> </span>--machine<span class="w"> </span>&lt;machine-id&gt;
+</code></pre></div>
+<h3 id="5-delete-a-licence">5. Delete a licence<a class="headerlink" href="#5-delete-a-licence" title="Permanent link">&para;</a></h3>
+<p>Use this to permanently remove a licence record that's no longer needed — for example to
+clean up old <strong>revoked</strong> or <strong>expired</strong> licences from the list. This is a GUI-only action
+(there is currently no <code>admin_cli.py delete</code> command).</p>
+<ol>
+<li>Select a licence row whose status is <strong>Revoked</strong> or <strong>Expired</strong>.</li>
+<li>Click <strong>Delete</strong>.</li>
+<li>Read the confirmation message — this cannot be undone.</li>
+<li>Confirm only if you are sure.</li>
+</ol>
+<p>The <strong>Delete</strong> action is disabled for <strong>Active</strong>, <strong>Unactivated</strong> or <strong>Full</strong> licences — the
+server rejects the request unless the licence is already revoked or expired, so revoke it
+first if you need to remove an active licence.</p>
+<h3 id="6-list-licences-and-check-status">6. List licences and check status<a class="headerlink" href="#6-list-licences-and-check-status" title="Permanent link">&para;</a></h3>
+<p>In the GUI:</p>
+<ol>
+<li>Click <strong>Refresh</strong> to reload all licences.</li>
+<li>Use the search box to find a customer, licence key, or machine.</li>
+<li>Use the status filter for <strong>Active</strong>, <strong>Unactivated</strong>, <strong>Full</strong>, <strong>Expired</strong>, or <strong>Revoked</strong>.</li>
+<li>Select a row to see details such as expiry date, days remaining, machines, activation time, and last validation time.</li>
+<li>Click <strong>Status</strong> to fetch the latest server status for the selected licence.</li>
+<li>Use <strong>Copy license key</strong> if you need to paste the selected key into a support message.</li>
+</ol>
+<p>CLI equivalents:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>scripts/admin_cli.py<span class="w"> </span>list
+python<span class="w"> </span>scripts/admin_cli.py<span class="w"> </span>status<span class="w"> </span>--key<span class="w"> </span>&lt;license-key&gt;
+</code></pre></div>
+<h2 id="command-line-alternative">Command-line alternative<a class="headerlink" href="#command-line-alternative" title="Permanent link">&para;</a></h2>
+<p>The script <code>license-server/scripts/admin_cli.py</code> is supported for scripting, automation, and fallback support work. It reuses the same <code>tekla_nest.admin.api_client.AdminApiClient</code> as the GUI (create/list/status/revoke/release only — delete is GUI-only, see above).</p>
+<p>Set these environment variables first:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">LICENSE_SERVER_URL</span><span class="o">=</span><span class="s2">"https://europe-west1-&lt;project-id&gt;.cloudfunctions.net"</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">ADMIN_API_KEY</span><span class="o">=</span><span class="s2">"</span><span class="nv">$ADMIN_KEY</span><span class="s2">"</span>
+</code></pre></div>
+<p>Then run commands from <code>license-server/</code>:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>scripts/admin_cli.py<span class="w"> </span>list
+</code></pre></div>
+<p>On Windows, if <code>python</code> isn't recognised, use the launcher instead: <code>py scripts\admin_cli.py list</code> (see <a href="../getting-started/#4-windows-notes-path-shims-venvs">Getting started</a>).</p>
+<h2 id="security-notes">Security notes<a class="headerlink" href="#security-notes" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Protect admin keys</p>
+<p><code>ADMIN_API_KEY</code> and <code>MASTER_ADMIN_API_KEY</code> can perform admin licence operations. Never commit them, paste them into issue trackers, include them in screenshots, or store them in release artifacts.</p>
+</div>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Use</th>
+<th>Storage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ADMIN_API_KEY</code></td>
+<td>Normal daily admin work</td>
+<td>Team password vault. Rotate if exposed or when staff access changes.</td>
+</tr>
+<tr>
+<td><code>MASTER_ADMIN_API_KEY</code></td>
+<td>Break-glass recovery only, for example when the normal key is lost</td>
+<td>Separate restricted vault or offline recovery store.</td>
+</tr>
+</tbody>
+</table>
+<p>Break-glass process:</p>
+<ol>
+<li>Use <code>MASTER_ADMIN_API_KEY</code> only when the normal <code>ADMIN_API_KEY</code> is unavailable.</li>
+<li>Paste it into the same <strong>Admin key</strong> field.</li>
+<li>Check <strong>Using recovery key</strong> so the warning is visible.</li>
+<li>Do only the recovery task.</li>
+<li>Rotate the normal <code>ADMIN_API_KEY</code> immediately if it was lost.</li>
+<li>Close the admin app and return to the normal key.</li>
+</ol>
+<p>The master key does <strong>not</strong> unlock the customer desktop app. It only authorizes the same licence-server admin endpoints as the normal admin key.</p>
+<h2 id="small-commands-table">Small commands table<a class="headerlink" href="#small-commands-table" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Install dependencies</td>
+<td><code>make install</code></td>
+</tr>
+<tr>
+<td>Run admin GUI from source</td>
+<td><code>make run-admin</code></td>
+</tr>
+<tr>
+<td>Run the entry point directly</td>
+<td><code>uv run tekla-nest-admin</code></td>
+</tr>
+<tr>
+<td>Set CLI server URL</td>
+<td><code>export LICENSE_SERVER_URL="https://europe-west1-&lt;project-id&gt;.cloudfunctions.net"</code></td>
+</tr>
+<tr>
+<td>Set CLI admin key</td>
+<td><code>export ADMIN_API_KEY="$ADMIN_KEY"</code></td>
+</tr>
+<tr>
+<td>CLI: create licence</td>
+<td><code>python scripts/admin_cli.py create --customer "Acme" --days 365 --machines 1</code></td>
+</tr>
+<tr>
+<td>CLI: list licences</td>
+<td><code>python scripts/admin_cli.py list</code></td>
+</tr>
+<tr>
+<td>CLI: check status</td>
+<td><code>python scripts/admin_cli.py status --key &lt;license-key&gt;</code></td>
+</tr>
+<tr>
+<td>CLI: revoke licence</td>
+<td><code>python scripts/admin_cli.py revoke --key &lt;license-key&gt;</code></td>
+</tr>
+<tr>
+<td>CLI: release all machines</td>
+<td><code>python scripts/admin_cli.py release --key &lt;license-key&gt;</code></td>
+</tr>
+<tr>
+<td>CLI: release one machine</td>
+<td><code>python scripts/admin_cli.py release --key &lt;license-key&gt; --machine &lt;machine-id&gt;</code></td>
+</tr>
+<tr>
+<td>Delete licence</td>
+<td>GUI only — select a <strong>Revoked</strong>/<strong>Expired</strong> row → <strong>Delete</strong></td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

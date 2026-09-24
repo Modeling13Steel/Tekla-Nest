@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>02 · Report &amp; insights — Tekla Nest</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+  <header class="chrome">
+    <div class="chrome__row">
+      <div class="chrome__brand">
+        <div class="chrome__brand-mark">TN</div>
+        <div>
+          <div class="chrome__app-title">M13S Nest</div>
+          <div class="chrome__app-sub">Report · IPE-2026-Q2</div>
+        </div>
+      </div>
+      <nav class="chrome__menu">
+        <a href="./01-main-shell.html">Workspace</a>
+        <a href="#" aria-current="page">Report</a>
+        <a href="#">Stock</a>
+        <a href="#">Settings</a>
+      </nav>
+      <div class="chrome__spacer"></div>
+      <button class="btn">⇩ PDF</button>
+      <button class="btn">⇩ Excel</button>
+      <button class="btn">⇩ CSV</button>
+      <button class="btn btn--primary">Share ↗</button>
+    </div>
+  </header>
+
+  <section class="kpi-strip">
+    <div class="kpi kpi--success">
+      <div class="kpi__label">Overall waste</div>
+      <div class="kpi__value">6.4%</div>
+      <div class="kpi__sub">Plant target ≤ 8% · within budget</div>
+      <div class="kpi__bar"><span style="width:93.6%"></span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">Total stock used</div>
+      <div class="kpi__value">312 m</div>
+      <div class="kpi__sub">≈ 1.04 tonnes · S275JR</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">Scrap (≤ 2 m)</div>
+      <div class="kpi__value">1.8%</div>
+      <div class="kpi__sub">Below scrap threshold</div>
+    </div>
+    <div class="kpi kpi--warning">
+      <div class="kpi__label">Unfit pieces</div>
+      <div class="kpi__value">3</div>
+      <div class="kpi__sub">HEA 240 · S275JR</div>
+    </div>
+  </section>
+
+  <main style="max-width: 1640px; margin: 0 auto; padding: 0 var(--s-6) var(--s-7); display:grid; grid-template-columns: 1fr 360px; gap: var(--s-5);">
+
+    <!-- LEFT: profile sections -->
+    <div style="display:grid; gap: var(--s-5);">
+
+      <!-- Profile: HEA 240 -->
+      <section class="panel">
+        <div class="panel__head">
+          <h2 class="panel__title">HEA 240 · S275JR</h2>
+          <span class="panel__meta">2 bars · 0% waste · 3 unfit pieces</span>
+          <div class="panel__spacer"></div>
+          <button class="btn btn--ghost btn--sm">↕ Reorder</button>
+        </div>
+
+        <div class="panel__body">
+          <div class="insight insight--warning" style="margin-bottom: var(--s-4);">
+            <div class="insight__icon">!</div>
+            <div>
+              <div class="insight__title">3 pieces could not be placed</div>
+              <div class="insight__body">Available stock holds 2× 6 100 mm bars but the plan requested 5 cuts at 6 100 mm. Add 3 more bars or split B-410 into shorter pieces.</div>
+              <ul style="margin: 8px 0 0; padding-left: 18px; font-size: 12.5px; color: var(--text-secondary);">
+                <li>B-410 · 6 100 mm · S275JR</li>
+                <li>B-410 · 6 100 mm · S275JR</li>
+                <li>B-410 · 6 100 mm · S275JR</li>
+              </ul>
+            </div>
+            <button class="btn btn--sm btn--primary">Add stock</button>
+          </div>
+
+          <div style="display:grid; gap: var(--s-4);">
+
+            <article style="display:grid; gap:8px;">
+              <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                <div><b>Bar 1</b> · 6 100 mm <span class="pill pill--ok" style="margin-left:8px;">100% used</span></div>
+                <div style="color:var(--text-muted); font-size:12.5px;">Mercado · STK-001</div>
+              </div>
+              <div class="cutbar" style="height:30px;"><div class="cutbar__seg cutbar__seg--a" style="width:100%">6100 mm · B-410</div></div>
+            </article>
+
+            <article style="display:grid; gap:8px;">
+              <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                <div><b>Bar 2</b> · 6 100 mm <span class="pill pill--ok" style="margin-left:8px;">100% used</span></div>
+                <div style="color:var(--text-muted); font-size:12.5px;">Mercado · STK-002</div>
+              </div>
+              <div class="cutbar" style="height:30px;"><div class="cutbar__seg cutbar__seg--a" style="width:100%">6100 mm · B-410</div></div>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Profile: IPE 200 -->
+      <section class="panel">
+        <div class="panel__head">
+          <h2 class="panel__title">IPE 200 · S275JR</h2>
+          <span class="panel__meta">3 bars · 8.3% waste</span>
+        </div>
+        <div class="panel__body">
+          <div style="display:grid; gap: var(--s-4);">
+
+            <article style="display:grid; gap:8px;">
+              <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                <div><b>Bar 1</b> · 12 100 mm <span class="pill pill--warn" style="margin-left:8px;">10.3% waste</span></div>
+                <div style="color:var(--text-muted); font-size:12.5px;">Mercado</div>
+              </div>
+              <div class="cutbar" style="height:30px;">
+                <div class="cutbar__seg cutbar__seg--b" style="width:49.6%">6000 · B-104</div>
+                <div class="cutbar__seg cutbar__seg--c" style="width:39.7%">4800 · B-108</div>
+                <div class="cutbar__seg cutbar__seg--waste" style="width:10.7%">1250 mm</div>
+              </div>
+            </article>
+
+            <article style="display:grid; gap:8px;">
+              <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                <div><b>Bar 2</b> · 12 100 mm <span class="pill pill--ok" style="margin-left:8px;">100% used</span></div>
+                <div style="color:var(--text-muted); font-size:12.5px;">Mercado</div>
+              </div>
+              <div class="cutbar" style="height:30px;">
+                <div class="cutbar__seg cutbar__seg--b" style="width:25.2%">3050 · B-301</div>
+                <div class="cutbar__seg cutbar__seg--b" style="width:25.2%">3050 · B-301</div>
+                <div class="cutbar__seg cutbar__seg--b" style="width:25.2%">3050 · B-301</div>
+                <div class="cutbar__seg cutbar__seg--b" style="width:24.4%">2950 · B-301</div>
+              </div>
+            </article>
+
+            <article style="display:grid; gap:8px;">
+              <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                <div><b>Bar 3</b> · 6 000 mm <span class="pill pill--ok" style="margin-left:8px;">100% used</span></div>
+                <div style="color:var(--text-muted); font-size:12.5px;">Cliente · downsized from 12 100</div>
+              </div>
+              <div class="cutbar" style="height:30px;">
+                <div class="cutbar__seg cutbar__seg--b" style="width:100%">6000 · B-104</div>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- RIGHT: side rail -->
+    <aside style="display:grid; gap: var(--s-5); align-self:start; position:sticky; top: 80px;">
+
+      <section class="panel">
+        <div class="panel__head">
+          <h3 class="panel__title">Material breakdown</h3>
+        </div>
+        <div class="panel__body" style="display:grid; gap:var(--s-3);">
+          <div>
+            <div style="display:flex; justify-content:space-between; font-size:12.5px;"><span>S275JR</span><span><b>68%</b></span></div>
+            <div class="kpi__bar"><span style="width:68%"></span></div>
+          </div>
+          <div>
+            <div style="display:flex; justify-content:space-between; font-size:12.5px;"><span>S235JR</span><span><b>22%</b></span></div>
+            <div class="kpi__bar"><span style="width:22%; background: linear-gradient(90deg, var(--brand-cyan), var(--brand-primary));"></span></div>
+          </div>
+          <div>
+            <div style="display:flex; justify-content:space-between; font-size:12.5px;"><span>S355JR</span><span><b>10%</b></span></div>
+            <div class="kpi__bar"><span style="width:10%; background: linear-gradient(90deg, #6366f1, #4338ca);"></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel__head">
+          <h3 class="panel__title">Suggestions</h3>
+        </div>
+        <div class="panel__body" style="display:grid; gap:var(--s-3);">
+          <div class="insight insight--ai">
+            <div class="insight__icon">✦</div>
+            <div>
+              <div class="insight__title">Lower waste by 2.1%</div>
+              <div class="insight__body">Use 12 100 mm bars for HEA 240 instead of 15 100 mm.</div>
+            </div>
+          </div>
+          <div class="insight">
+            <div class="insight__icon">i</div>
+            <div>
+              <div class="insight__title">Kerf is 0 mm</div>
+              <div class="insight__body">Confirm this matches your saw blade. A 5 mm kerf would change Bar 1.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel__head">
+          <h3 class="panel__title">Reorder bars</h3>
+        </div>
+        <div class="panel__body" style="display:grid; gap: 6px;">
+          <button class="btn btn--ghost btn--sm" style="justify-content:flex-start;">▲  Move Bar 3 up</button>
+          <button class="btn btn--ghost btn--sm" style="justify-content:flex-start;">▼  Move Bar 3 down</button>
+          <button class="btn btn--ghost btn--sm" style="justify-content:flex-start;">↺  Reset to optimal</button>
+        </div>
+      </section>
+
+    </aside>
+  </main>
+
+  <footer class="statusbar">
+    <span><span class="dot"></span> Plan ready</span>
+    <span style="color:var(--text-muted);">·</span>
+    <span>Click any bar to inspect cuts</span>
+    <span class="chrome__spacer" style="flex:1;"></span>
+    <span>Last calculated 14:23 · 2.1 s</span>
+  </footer>
+
+</body>
+</html>

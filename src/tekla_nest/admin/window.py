@@ -129,6 +129,7 @@ class AdminWindow(QMainWindow):
             ("status", self._fetch_selected_status),
             ("revoke", self._revoke_selected),
             ("release_all", self._release_all_selected),
+            ("delete", self._delete_selected),
         ):
             action = QAction(self)
             apply_action_descriptor(action, self._command_descriptor(command_id))
@@ -354,6 +355,30 @@ class AdminWindow(QMainWindow):
             lambda _result: self._after_mutation(tr("admin.status.released")),
         )
 
+    def _delete_selected(self) -> None:
+        record = self._selected
+        client = self._require_client()
+        if record is None or client is None:
+            return
+        if record.status() not in ("revoked", "expired"):
+            self._status.set_status(tr("admin.status.cannot_delete"), "warning")
+            return
+        if QMessageBox.question(
+            self,
+            tr("admin.confirm.delete_title"),
+            tr(
+                "admin.confirm.delete_message",
+                customer=record.customer,
+                key=record.license_key,
+            ),
+        ) != QMessageBox.StandardButton.Yes:
+            return
+        self._run_operation(
+            "delete",
+            lambda: client.delete(record.license_key),
+            lambda _result: self._after_mutation(tr("admin.status.deleted")),
+        )
+
     def _release_selected_machine(self) -> None:
         record = self._selected
         client = self._require_client()
@@ -498,6 +523,14 @@ class AdminWindow(QMainWindow):
             self._set_enabled(command_id, connected and not self._busy)
         for command_id in ("status", "revoke", "release_all"):
             self._set_enabled(command_id, connected and has_selection and not self._busy)
+        can_delete = (
+            connected
+            and has_selection
+            and not self._busy
+            and self._selected is not None
+            and self._selected.status() in ("revoked", "expired")
+        )
+        self._set_enabled("delete", can_delete)
         detail_enabled = connected and has_selection and not self._busy
         self._copy_key_button.setEnabled(has_selection)
         self._release_machine_button.setEnabled(

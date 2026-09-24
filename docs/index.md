@@ -3,16 +3,19 @@
 Welcome. This site explains how to **install, run, build, deploy and administer** the
 Tekla Nest product family.
 
-## The four parts
+## The three parts
 
-Everything lives in one repository (`tekla_package/`), split into four folders:
+Everything lives in **one repository**, split into three parts:
 
-| Part | What it is | Who touches it |
-|---|---|---|
-| **Nesting app** | The desktop program that optimises steel-bar cutting. | End users; whoever builds the installer. |
-| **Admin console** | Desktop tool to issue and revoke software licences. | An administrator. |
-| **Infrastructure (license server)** | The small cloud service that checks licences. | An operator, once, to deploy it. |
-| **Shared foundation** (`tekla-common`) | Common code, branding, translations. | Nobody directly — used by the apps above. |
+| Part | What it is | Who touches it | Lives in |
+|---|---|---|---|
+| **Nesting app** | The desktop program that optimises steel-bar cutting. | End users; whoever builds the installer. | `src/tekla_nest/` (single Python package) |
+| **Admin console** | Desktop tool to issue, revoke and delete software licences. | An administrator. | `src/tekla_nest/admin/` (submodule of the same package) |
+| **Infrastructure (license server)** | The small cloud service that checks licences. | An operator, once, to deploy it. | `license-server/` (Firebase Functions + Terraform) |
+
+There is no separate `tekla-common`/`tekla-admin-console` package — the nesting app and the
+admin console share code by living in the same `tekla_nest` package (config, i18n,
+branding, resources are shared modules under `src/tekla_nest/`).
 
 ## Where to go next
 

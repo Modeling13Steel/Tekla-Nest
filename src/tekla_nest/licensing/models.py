@@ -55,7 +55,7 @@ class LicenseFile:
 
 
 @dataclasses.dataclass(slots=True)
-class Ok[T]:
+class Ok:
     """Success result wrapping a value of type *T*."""
 
     value: T

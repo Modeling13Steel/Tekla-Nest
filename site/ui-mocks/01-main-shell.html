@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>01 · Enhanced workspace — Tekla Nest</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+  <header class="chrome">
+    <div class="chrome__row">
+      <div class="chrome__brand">
+        <div class="chrome__brand-mark">TN</div>
+        <div>
+          <div class="chrome__app-title">M13S Nest</div>
+          <div class="chrome__app-sub">Cutting plan · project IPE-2026-Q2</div>
+        </div>
+      </div>
+
+      <nav class="chrome__menu" aria-label="Main menu">
+        <a href="#" aria-current="page">Workspace</a>
+        <a href="./02-report-insights.html">Report</a>
+        <a href="#">Stock</a>
+        <a href="#">Settings</a>
+      </nav>
+
+      <div class="chrome__spacer"></div>
+
+      <label class="search" aria-label="Search or run command">
+        <span aria-hidden="true">⌕</span>
+        <input placeholder="Search parts, stock, actions…">
+        <kbd>Ctrl K</kbd>
+      </label>
+
+      <div class="chrome__actions">
+        <button class="btn btn--ghost btn--icon" title="Language: English">EN</button>
+        <button class="btn btn--ghost btn--icon" title="Toggle dark mode" onclick="document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark'">◐</button>
+        <button class="btn btn--ghost">Load Parts</button>
+        <button class="btn btn--accent">Auto-Stock</button>
+        <button class="btn btn--primary">Calculate ▸</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- KPI strip -->
+  <section class="kpi-strip" aria-label="Optimization summary">
+    <div class="kpi kpi--success">
+      <div class="kpi__label">Overall waste</div>
+      <div class="kpi__value">6.4%</div>
+      <div class="kpi__sub">↓ 1.8 pts vs. last calculation</div>
+      <div class="kpi__bar"><span style="width: 93.6%"></span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">Bars used</div>
+      <div class="kpi__value">42</div>
+      <div class="kpi__sub">Mercado 31 · Cliente 11</div>
+    </div>
+    <div class="kpi kpi--warning">
+      <div class="kpi__label">Unfit pieces</div>
+      <div class="kpi__value">3</div>
+      <div class="kpi__sub">In 1 profile · review needed</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">Profiles · materials</div>
+      <div class="kpi__value">4 · 3</div>
+      <div class="kpi__sub">HEA, IPE, UPN, WI · S235 S275 S355</div>
+    </div>
+  </section>
+
+  <!-- Workspace grid -->
+  <main class="workspace">
+
+    <!-- Parts panel -->
+    <section class="panel" aria-labelledby="parts-h">
+      <div class="panel__head">
+        <h2 id="parts-h" class="panel__title">Parts</h2>
+        <span class="panel__meta">128 items</span>
+        <div class="panel__spacer"></div>
+        <button class="btn btn--ghost btn--sm">＋ Add</button>
+        <button class="btn btn--ghost btn--sm">⤴ CSV</button>
+      </div>
+      <div style="padding: var(--s-3) var(--s-5);">
+        <div class="chips" role="group" aria-label="Filter by profile">
+          <button class="chip is-active">All</button>
+          <button class="chip">HEA240 · 42</button>
+          <button class="chip">IPE200 · 54</button>
+          <button class="chip">UPN120 · 18</button>
+          <button class="chip">WI300 · 14</button>
+        </div>
+      </div>
+      <div class="table-wrap" style="max-height: 460px;">
+        <table class="data" aria-label="Parts table">
+          <thead>
+            <tr><th>Qty</th><th>Length</th><th>Mark</th><th>Profile</th><th>Material</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="num">4</td><td class="num">6 000</td><td>B-104</td><td>IPE 200</td><td><span class="pill pill--mat">S275JR</span></td></tr>
+            <tr><td class="num">2</td><td class="num">7 200</td><td>B-221</td><td>HEA 220</td><td><span class="pill pill--mat">S355JR</span></td></tr>
+            <tr><td class="num">12</td><td class="num">3 050</td><td>B-301</td><td>IPE 200</td><td><span class="pill pill--mat">S275JR</span></td></tr>
+            <tr class="is-warning"><td class="num">5</td><td class="num">6 100</td><td>B-410</td><td>HEA 240</td><td><span class="pill pill--mat">S275JR</span></td></tr>
+            <tr><td class="num">8</td><td class="num">4 800</td><td>B-108</td><td>IPE 180</td><td><span class="pill pill--mat">S275JR</span></td></tr>
+            <tr><td class="num">3</td><td class="num">12 000</td><td>B-552</td><td>WI 300</td><td><span class="pill pill--mat">S235JR</span></td></tr>
+            <tr><td class="num">6</td><td class="num">2 400</td><td>B-601</td><td>UPN 120</td><td><span class="pill pill--mat">S235JR</span></td></tr>
+            <tr><td class="num">1</td><td class="num">15 100</td><td>B-700</td><td>HEA 240</td><td><span class="pill pill--mat">S355JR</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Stock panel -->
+    <section class="panel" aria-labelledby="stock-h">
+      <div class="panel__head">
+        <h2 id="stock-h" class="panel__title">Stock</h2>
+        <div class="panel__spacer"></div>
+        <button class="btn btn--ghost btn--sm">Auto-populate</button>
+        <button class="btn btn--ghost btn--sm">⤴ CSV</button>
+      </div>
+      <div class="tabs" role="tablist">
+        <div class="tab" role="tab" aria-selected="true">Mercado <span class="pill" style="margin-left:6px;">216</span></div>
+        <div class="tab" role="tab" aria-selected="false">Cliente <span class="pill" style="margin-left:6px;">18</span></div>
+      </div>
+      <div style="padding: var(--s-3) var(--s-5);">
+        <div class="chips">
+          <button class="chip is-active">All materials</button>
+          <button class="chip">S235JR</button>
+          <button class="chip">S275JR</button>
+          <button class="chip">S355JR</button>
+          <button class="chip chip--ghost">＋ Material</button>
+        </div>
+      </div>
+      <div class="table-wrap" style="max-height: 460px;">
+        <table class="data" aria-label="Market stock">
+          <thead>
+            <tr><th>Qty</th><th>Length</th><th>Profile</th><th>Material</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="num">100</td><td class="num">6 100</td><td>HEA 240</td><td><span class="pill pill--mat">S235JR</span></td></tr>
+            <tr><td class="num">100</td><td class="num">10 100</td><td>HEA 240</td><td><span class="pill pill--mat">S235JR</span></td></tr>
+            <tr><td class="num">100</td><td class="num">12 100</td><td>HEA 240</td><td><span class="pill pill--mat">S235JR</span></td></tr>
+            <tr><td class="num">100</td><td class="num">6 100</td><td>HEA 240</td><td><span class="pill pill--mat">S275JR</span></td></tr>
+            <tr><td class="num">100</td><td class="num">12 100</td><td>HEA 240</td><td><span class="pill pill--mat">S275JR</span></td></tr>
+            <tr><td class="num">100</td><td class="num">15 100</td><td>HEA 240</td><td><span class="pill pill--mat">S355JR</span></td></tr>
+            <tr><td class="num">100</td><td class="num">6 000</td><td>IPE 200</td><td><span class="pill pill--mat">S275JR</span></td></tr>
+            <tr><td class="num">100</td><td class="num">12 000</td><td>IPE 200</td><td><span class="pill pill--mat">S275JR</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Report preview -->
+    <section class="panel" aria-labelledby="rep-h">
+      <div class="panel__head">
+        <h2 id="rep-h" class="panel__title">Report preview</h2>
+        <span class="panel__meta">HEA 240 · 5 of 5 bars</span>
+        <div class="panel__spacer"></div>
+        <button class="btn btn--ghost btn--sm">⇩ PDF</button>
+        <button class="btn btn--ghost btn--sm">⇩ Excel</button>
+        <a class="btn btn--sm" href="./02-report-insights.html">Open ↗</a>
+      </div>
+      <div class="panel__body" style="display:grid; gap: var(--s-3);">
+
+        <div class="insight insight--ai">
+          <div class="insight__icon">✦</div>
+          <div>
+            <div class="insight__title">Suggested optimization</div>
+            <div class="insight__body">Switching 2 bars from <b>15 100 mm</b> to <b>12 100 mm</b> would reduce waste by ~2.1% without affecting cut feasibility.</div>
+          </div>
+          <button class="btn btn--sm btn--primary">Apply</button>
+        </div>
+
+        <div class="insight insight--warning">
+          <div class="insight__icon">!</div>
+          <div>
+            <div class="insight__title">3 pieces could not be placed</div>
+            <div class="insight__body">B-410 × 6 100 mm needs more <b>HEA 240 · S275JR</b> bars. Stock has 2, you requested 5.</div>
+          </div>
+          <button class="btn btn--sm">Add stock</button>
+        </div>
+
+        <!-- Compact bar list with inline viz -->
+        <div style="display:grid; gap: var(--s-3); margin-top: var(--s-2);">
+
+          <article style="display:grid; gap:6px;">
+            <div style="display:flex; justify-content:space-between; font-size:12.5px;">
+              <span><b>Bar 1</b> · HEA 240 · S275JR · 6 100 mm</span>
+              <span style="color:var(--state-success); font-weight:600;">0% waste</span>
+            </div>
+            <div class="cutbar"><div class="cutbar__seg cutbar__seg--a" style="width:100%">6100 · B-410</div></div>
+          </article>
+
+          <article style="display:grid; gap:6px;">
+            <div style="display:flex; justify-content:space-between; font-size:12.5px;">
+              <span><b>Bar 2</b> · HEA 240 · S275JR · 6 100 mm</span>
+              <span style="color:var(--state-success); font-weight:600;">0% waste</span>
+            </div>
+            <div class="cutbar"><div class="cutbar__seg cutbar__seg--a" style="width:100%">6100 · B-410</div></div>
+          </article>
+
+          <article style="display:grid; gap:6px;">
+            <div style="display:flex; justify-content:space-between; font-size:12.5px;">
+              <span><b>Bar 3</b> · IPE 200 · S275JR · 12 100 mm</span>
+              <span style="color:var(--state-warning); font-weight:600;">8.3% waste</span>
+            </div>
+            <div class="cutbar">
+              <div class="cutbar__seg cutbar__seg--b" style="width:50%">6000 · B-104</div>
+              <div class="cutbar__seg cutbar__seg--c" style="width:39.7%">4800 · B-108</div>
+              <div class="cutbar__seg cutbar__seg--waste" style="width:10.3%">waste</div>
+            </div>
+          </article>
+
+          <article style="display:grid; gap:6px;">
+            <div style="display:flex; justify-content:space-between; font-size:12.5px;">
+              <span><b>Bar 4</b> · WI 300 · S235JR · 12 000 mm</span>
+              <span style="color:var(--state-success); font-weight:600;">0% waste</span>
+            </div>
+            <div class="cutbar"><div class="cutbar__seg cutbar__seg--d" style="width:100%">12000 · B-552</div></div>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="statusbar" role="status" aria-live="polite">
+    <span><span class="dot"></span> Calculation complete · 2 s</span>
+    <span style="color:var(--text-muted);">·</span>
+    <span>42 bars · 6.4% overall waste · 3 unfit</span>
+    <span class="chrome__spacer" style="flex:1;"></span>
+    <span>License: <b>Active</b> · expires 2027-04-30</span>
+  </footer>
+
+</body>
+</html>

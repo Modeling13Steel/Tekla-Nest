@@ -96,6 +96,9 @@ class AdminApiClient:
             payload["machine_id"] = machine_id
         return self.request("POST", "admin_release", json=payload)
 
+    def delete(self, license_key: str) -> dict[str, Any]:
+        return self.request("POST", "admin_delete", json={"license_key": license_key})
+
     def _url(self, path: str) -> str:
         return f"{self.server_url}/{path.strip('/')}"
 

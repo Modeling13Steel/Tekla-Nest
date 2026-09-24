@@ -7,15 +7,16 @@ It is for **administrators and support staff**, not end users. Use it to:
 1. Issue a new customer licence.
 2. Revoke a licence.
 3. Release a machine binding so a customer can activate again.
-4. List licences and check their current status.
+4. Delete a revoked or expired licence record.
+5. List licences and check their current status.
 
-The console talks to the Tekla Nest licence server over HTTPS. In this codebase, that server is the `tekla-iac` Firebase Functions service.
+The console talks to the Tekla Nest licence server over HTTPS — the `license-server/` Firebase Functions service in this repository (see [Infrastructure](infrastructure.md)).
 
 | Term | Meaning |
 | --- | --- |
 | Licence key | The key given to a customer so Tekla Nest can be activated. |
 | Admin API key | A secret token that lets an administrator call admin endpoints on the licence server. |
-| Bearer token | A password-like value sent in the HTTPS `Authorization: Bearer ...` header. |
+| Bearer token | The admin key is sent in the HTTPS `Authorization: Bearer <admin-key>` header. |
 | Machine binding | The server record that says a licence has been activated on a specific computer. |
 
 ## Prerequisites and connection settings
@@ -24,7 +25,7 @@ You need two values before the console can connect.
 
 | Setting | Where it comes from | What the app does |
 | --- | --- | --- |
-| Licence server URL | The deployed Firebase Functions base URL, for example `https://europe-west1-<project-id>.cloudfunctions.net` | The GUI shows a **License server URL** field. It is pre-filled from `config.yaml` `licensing.server_url` via `tekla-common`; if blank or wrong, paste the URL manually. The app requires it to start with `http://` or `https://`. |
+| Licence server URL | The deployed Firebase Functions base URL, for example `https://europe-west1-<project-id>.cloudfunctions.net` | The GUI shows a **License server URL** field, pre-filled from the root `config.yaml`'s `licensing.server_url`; if blank or wrong, paste the URL manually. The app requires it to start with `http://` or `https://`. |
 | `ADMIN_API_KEY` | The normal admin key stored as a Firebase Functions secret | Paste it into the GUI **Admin key** field. The field is password-hidden. The GUI does not load it from an environment variable and does not save it for the next session. |
 
 When you click **Connect and refresh** or **Test connection**, the app creates an API client with those two values. The client removes any trailing slash from the server URL and sends the key as:
@@ -37,22 +38,22 @@ The **Using recovery key** checkbox only shows a warning in the GUI. It does not
 
 ## How to run or install it
 
-The admin console is a `uv` workspace package:
+The admin console is **part of the single `tekla-nest` package** — not a separate workspace
+package. It lives in `src/tekla_nest/admin/` and shares config/i18n/branding with the nesting
+app.
 
 | Item | Value |
 | --- | --- |
-| Workspace package | `tekla-admin-console` |
-| Python package | `tekla_admin` |
-| Dependency | `tekla-common` |
+| Python package | `tekla_nest` (submodule `tekla_nest.admin`) |
 | Entry point | `tekla-nest-admin` |
 | Dev make target | `make run-admin` |
 
 ### Run from source
 
-From `tekla_package/`:
+From the repository root:
 
 ```bash
-make bootstrap
+make install
 make run-admin
 ```
 
@@ -70,7 +71,7 @@ For normal admin users, install the Windows setup file:
 tekla-nest-admin-setup.exe
 ```
 
-This installer is built by the GitHub Actions workflow **Build Windows Packages** on Windows. It is packaged separately from:
+This installer is built by the GitHub Actions workflow **Build Windows Packages** on Windows (`make installer-admin` locally, which needs Inno Setup — see [Getting started](getting-started.md)). It is packaged separately from:
 
 - the customer-facing Tekla Nest app installer;
 - the licence-server infrastructure bundle.
@@ -103,7 +104,7 @@ In the GUI:
 6. The new licence key is copied to the clipboard.
 7. Send the licence key to the customer through the approved support channel.
 
-CLI equivalent, from `tekla_package/tekla-iac/`:
+CLI equivalent, from `license-server/`:
 
 ```bash
 python scripts/admin_cli.py create --customer "Acme Corporation" --days 365 --machines 1
@@ -154,7 +155,22 @@ python scripts/admin_cli.py release --key <license-key>
 python scripts/admin_cli.py release --key <license-key> --machine <machine-id>
 ```
 
-### 5. List licences and check status
+### 5. Delete a licence
+
+Use this to permanently remove a licence record that's no longer needed — for example to
+clean up old **revoked** or **expired** licences from the list. This is a GUI-only action
+(there is currently no `admin_cli.py delete` command).
+
+1. Select a licence row whose status is **Revoked** or **Expired**.
+2. Click **Delete**.
+3. Read the confirmation message — this cannot be undone.
+4. Confirm only if you are sure.
+
+The **Delete** action is disabled for **Active**, **Unactivated** or **Full** licences — the
+server rejects the request unless the licence is already revoked or expired, so revoke it
+first if you need to remove an active licence.
+
+### 6. List licences and check status
 
 In the GUI:
 
@@ -174,7 +190,7 @@ python scripts/admin_cli.py status --key <license-key>
 
 ## Command-line alternative
 
-The script `tekla-iac/scripts/admin_cli.py` is supported for scripting, automation, and fallback support work. It reuses the same `tekla_admin.api_client.AdminApiClient` as the GUI.
+The script `license-server/scripts/admin_cli.py` is supported for scripting, automation, and fallback support work. It reuses the same `tekla_nest.admin.api_client.AdminApiClient` as the GUI (create/list/status/revoke/release only — delete is GUI-only, see above).
 
 Set these environment variables first:
 
@@ -183,7 +199,13 @@ export LICENSE_SERVER_URL="https://europe-west1-<project-id>.cloudfunctions.net"
 export ADMIN_API_KEY="$ADMIN_KEY"
 ```
 
-Then run commands from `tekla_package/tekla-iac/`.
+Then run commands from `license-server/`:
+
+```bash
+python scripts/admin_cli.py list
+```
+
+On Windows, if `python` isn't recognised, use the launcher instead: `py scripts\admin_cli.py list` (see [Getting started](getting-started.md#4-windows-notes-path-shims-venvs)).
 
 ## Security notes
 
@@ -210,7 +232,7 @@ The master key does **not** unlock the customer desktop app. It only authorizes 
 
 | Task | Command |
 | --- | --- |
-| Install workspace dependencies | `make bootstrap` |
+| Install dependencies | `make install` |
 | Run admin GUI from source | `make run-admin` |
 | Run the entry point directly | `uv run tekla-nest-admin` |
 | Set CLI server URL | `export LICENSE_SERVER_URL="https://europe-west1-<project-id>.cloudfunctions.net"` |
@@ -221,3 +243,4 @@ The master key does **not** unlock the customer desktop app. It only authorizes 
 | CLI: revoke licence | `python scripts/admin_cli.py revoke --key <license-key>` |
 | CLI: release all machines | `python scripts/admin_cli.py release --key <license-key>` |
 | CLI: release one machine | `python scripts/admin_cli.py release --key <license-key> --machine <machine-id>` |
+| Delete licence | GUI only — select a **Revoked**/**Expired** row → **Delete** |

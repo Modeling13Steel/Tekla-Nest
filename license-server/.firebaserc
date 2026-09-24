@@ -1,6 +1,6 @@
 {
   "projects": {
-    "teklanest": "teklanest-d2699"
+    "default": "tekla-nest"
   },
   "targets": {},
   "etags": {}

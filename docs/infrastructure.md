@@ -44,12 +44,12 @@ payment card is still required on the account.
 | **Python 3.12** | <https://www.python.org/downloads/> |
 | **Terraform** *(optional)* | <https://developer.hashicorp.com/terraform/install> |
 
-All commands below run from the **`tekla_package/tekla-iac/`** folder.
+All commands below run from the **`license-server/`** folder.
 
 ## 4. Deploy roadmap (do these in order)
 
 !!! note
-    This mirrors the authoritative runbook, `tekla-iac/GUIDE.md`. If anything here differs,
+    This mirrors the authoritative runbook, `license-server/GUIDE.md`. If anything here differs,
     the GUIDE is the source of truth.
 
 **Step 1 — Sign in**
@@ -75,9 +75,19 @@ python scripts/generate_keys.py
     Only the **public** key is embedded in the desktop app.
 
 **Step 4 — Prepare the Functions environment** (the Firebase CLI expects a local venv)
+
+This script requires exactly **Python 3.12**.
+
 ```bash
-python scripts/bootstrap_functions_venv.py
+python3.12 scripts/bootstrap_functions_venv.py
 ```
+
+On Windows, `python3.12` is usually not on PATH — use the launcher instead:
+```powershell
+py -3.12 scripts\bootstrap_functions_venv.py
+```
+(see [Getting started](getting-started.md#4-windows-notes-path-shims-venvs)).
+
 
 **Step 5 — Store the three secrets**
 ```bash
@@ -119,12 +129,12 @@ When it finishes, Firebase prints the **function URLs** — note the base addres
 | `/activate` returns **403** after deploy | Allow public invocation: `gcloud run services add-iam-policy-binding activate --member="allUsers" --role="roles/run.invoker" ...`. |
 | Deploy fails: missing `functions/venv` | Re-run **Step 4** (`bootstrap_functions_venv.py`). |
 
-See `tekla-iac/GUIDE.md` for the exact troubleshooting commands.
+See `license-server/GUIDE.md` for the exact troubleshooting commands.
 
 ## 7. After deploying
 
-Point the desktop apps at your server: set **`licensing.server_url`** in
-`tekla-common/src/tekla_common/config.yaml` to the base URL from Step 6. Then use the
+Point the desktop apps at your server: set **`licensing.server_url`** in the
+repository root's **`config.yaml`** to the base URL from Step 6. Then use the
 [Admin console](admin-console.md) to issue licences.
 
 ## 8. Secrets & security
@@ -140,6 +150,8 @@ Point the desktop apps at your server: set **`licensing.server_url`** in
 
 ## 9. About the automated checks
 
-The `iac.yml` GitHub Action only **validates** the infrastructure (`terraform fmt` /
-`validate`, and a Functions syntax check). It **never deploys** — deployment is always the
-manual, operator-run process above.
+There is currently **no automated CI validation** for the Terraform/Functions code (no
+`iac.yml` workflow exists yet) — `terraform fmt`/`validate` and any Functions syntax checks
+must be run manually before deploying. Deployment itself is always the manual, operator-run
+process above (or `license-server/scripts/deploy.py`, see `license-server/GUIDE.md`) — CI
+never deploys infrastructure automatically.

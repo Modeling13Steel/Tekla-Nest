@@ -6,7 +6,7 @@
     bootstraps pip, installs pythonnet, and outputs a self-contained
     folder (build/python-embed/) ready to bundle with the installer.
 .PARAMETER PythonVersion
-    Python version to download (default: 3.12.7).
+    Python version to download (default: 3.11.9).
 .PARAMETER OutputDir
     Destination folder (default: build/python-embed).
 #>

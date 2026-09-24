@@ -6,6 +6,7 @@ Endpoints:
   POST /admin_create  — Issue a new license (admin)
   POST /admin_revoke  — Revoke a license (admin)
   POST /admin_release — Release machine binding (admin)
+  POST /admin_delete  — Delete a revoked or expired license (admin)
   GET  /admin_list    — List all licenses (admin)
   GET  /admin_status  — Get single license status (admin)
 """
@@ -386,6 +387,38 @@ def admin_release(req: https_fn.Request) -> https_fn.Response:
         update = _build_release_update(data, mid)
         firestore.client().collection(COLLECTION).document(key).update(update)
         return _json_resp({"license_key": key, "machines_remaining": len(update.get("machines", []))})
+
+    return handler(req)
+
+
+@https_fn.on_request(
+    **_runtime_options(
+        max_instances=5,
+        function_secrets=[ADMIN_API_KEY, MASTER_ADMIN_API_KEY],
+    )
+)
+def admin_delete(req: https_fn.Request) -> https_fn.Response:
+    if err := _require_post(req):
+        return err
+
+    @require_admin
+    def handler(r):
+        body, err = _parse_body(r)
+        if err:
+            return err
+        key = _body_str(body, "license_key")
+        if not key:
+            return _error("license_key is required")
+        data, err = _get_license(key)
+        if err:
+            return err
+        revoked = bool(data.get("revoked", False))
+        exp = _to_utc_datetime(data.get("expires_at"))
+        expired = bool(exp and exp < _now())
+        if not (revoked or expired):
+            return _error("Only revoked or expired licenses can be deleted", 409)
+        firestore.client().collection(COLLECTION).document(key).delete()
+        return _json_resp({"license_key": key, "deleted": True})
 
     return handler(req)
 

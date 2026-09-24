@@ -16,8 +16,8 @@ install-dev: ## Install project + dev dependencies (pytest, pytest-qt)
 	uv pip install -e ".[dev]"
 
 .PHONY: install-all
-install-all: ## Install everything (dev + pdf + tekla on Windows)
-	uv pip install -e ".[dev,pdf]"
+install-all: ## Install everything (dev + tekla on Windows)
+	uv pip install -e ".[dev,tekla]"
 
 # ── Run ──────────────────────────────────────────────────────
 
@@ -176,6 +176,14 @@ infrastructure-package: ## Package license-server infrastructure separately from
 .PHONY: deploy-infrastructure
 deploy-infrastructure: ## Deploy license-server Firebase infrastructure (cross-platform; use `make` on macOS/Linux, run the script directly on Windows)
 	cd license-server && python3.12 scripts/deploy.py
+
+.PHONY: setup-github-oidc
+setup-github-oidc: ## One-time: bootstrap GitHub OIDC/WIF + deploy-approval environment (auto-detects repo/reviewers; optional repo=owner/name, reviewer="--reviewer alice --reviewer bob", force=1)
+	cd license-server && python3.12 scripts/setup_github_oidc.py --set-github-vars $(if $(repo),--repo $(repo),) $(reviewer) $(if $(force),--force,)
+
+.PHONY: destroy-github-oidc
+destroy-github-oidc: ## Tear down the GitHub OIDC/WIF bootstrap created above (optional repo=owner/name, yes=1 to skip confirmation)
+	cd license-server && python3.12 scripts/setup_github_oidc.py --destroy $(if $(repo),--repo $(repo),) $(if $(yes),--yes,)
 
 .PHONY: package-all
 package-all: installers infrastructure-package ## Build separated desktop installers + infrastructure package

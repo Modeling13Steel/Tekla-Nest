@@ -40,12 +40,15 @@ def set_language(code: str) -> str:
     return code
 
 
-def tr(key: str, **params: object) -> str:
-    value = _lookup(_catalog(current_language()), key)
+def tr(translation_key: str, **params: object) -> str:
+    # Note: the parameter is named `translation_key` (not `key`) so that callers can
+    # freely pass a `key=...` placeholder (e.g. a license key) without a
+    # "got multiple values for argument" collision.
+    value = _lookup(_catalog(current_language()), translation_key)
     if value is None and current_language() != DEFAULT_LANGUAGE:
-        value = _lookup(_catalog(DEFAULT_LANGUAGE), key)
+        value = _lookup(_catalog(DEFAULT_LANGUAGE), translation_key)
     if value is None:
-        return key
+        return translation_key
     text = str(value)
     if params:
         return text.format(**params)

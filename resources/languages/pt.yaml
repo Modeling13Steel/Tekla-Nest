@@ -394,6 +394,10 @@ admin:
       text: Libertar todas as máquinas
       status: Libertar todas as máquinas associadas à licença selecionada.
       toolbar: Libertar todas
+    delete:
+      text: Eliminar licença
+      status: Eliminar permanentemente a licença revogada ou expirada selecionada.
+      toolbar: Eliminar
   status:
     ready: Introduza o URL do servidor de licenças e a chave de administração para começar.
     loading: A contactar o servidor de licenças...
@@ -408,6 +412,8 @@ admin:
     status_loaded: Estado mais recente da licença carregado.
     key_copied: Chave de licença copiada para a área de transferência.
     already_revoked: Esta licença já está revogada.
+    deleted: Licença eliminada.
+    cannot_delete: Só é possível eliminar licenças revogadas ou expiradas.
   errors:
     server_url_required: Introduza o URL do servidor de licenças.
     server_url_invalid: O URL do servidor de licenças tem de começar por http:// ou https://.
@@ -463,6 +469,8 @@ admin:
     release_all_message: "Libertar todas as máquinas associadas a {customer}?\n\nChave: {key}\n\nO cliente poderá ter de ativar novamente."
     release_machine_title: Libertar máquina
     release_machine_message: "Libertar a máquina {machine} de {customer}?\n\nO cliente poderá ter de ativar novamente."
+    delete_title: Eliminar licença
+    delete_message: "Eliminar permanentemente a licença de {customer}?\n\nChave: {key}\n\nEsta ação não pode ser anulada."
 
 tables:
   common:
