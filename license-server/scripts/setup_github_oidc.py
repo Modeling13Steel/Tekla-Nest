@@ -57,7 +57,7 @@ ENVIRONMENT_NAME = "license-server-deploy"  # must match .github/workflows/licen
 
 # Minimum roles the deployer identity needs to validate secrets and run
 # `firebase deploy --only functions`. Deliberately excludes anything that
-# could create/rotate/read secret *values* (secretmanager.viewer only).
+# could create/rotate/read secret *values* (secre¢tmanager.viewer only).
 DEPLOYER_PROJECT_ROLES = [
     "roles/cloudfunctions.developer",
     "roles/run.developer",
@@ -70,7 +70,8 @@ DEPLOYER_PROJECT_ROLES = [
 def run(cmd: list[str], *, check: bool = True, capture: bool = False,
         input_data: str | None = None) -> subprocess.CompletedProcess:
     print(f"$ {' '.join(cmd)}")
-    return subprocess.run(cmd, check=check, cwd=ROOT, text=True, capture_output=capture, input=input_data)
+    resolved = [shutil.which(cmd[0]) or cmd[0], *cmd[1:]]
+    return subprocess.run(resolved, check=check, cwd=ROOT, text=True, capture_output=capture, input=input_data)
 
 
 def which(name: str) -> str | None:
