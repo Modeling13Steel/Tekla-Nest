@@ -190,14 +190,10 @@ insights:
     detail: "{piece_count} peça(s) não couberam. Maior não cortada: {length} mm."
   high_waste:
     title: "Desperdício elevado em {profile}"
-    detail: "{waste_pct}% de desperdício — considere stock de barras mais curtas."
+    detail: "{waste_pct:.1f}% de desperdício — considere stock de barras mais curtas."
   mixed_materials:
     title: "Materiais misturados em {profile}"
     detail: "{material_count} materiais diferentes — reagrupar reduz o setup."
-
-report:
-  filter:
-    all: Todos os perfis
 
 status:
   ready: Pronto.
@@ -306,6 +302,8 @@ errors:
     license_key_required: A chave de licença é obrigatória.
 
 report:
+  filter:
+    all: Todos os perfis
   title: Plano de Corte
   logo_alt: Logotipo M13S Nest
   generated_at: Gerado em

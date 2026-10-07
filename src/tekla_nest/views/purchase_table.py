@@ -35,6 +35,12 @@ from ..services.bar_aggregation import (
 _PurchaseRow = PurchaseRow
 
 
+
+def _source_label(source: str) -> str:
+    """Translate the internal stock source id ("Cliente"/"Mercado") for display."""
+    key = {"Cliente": "tables.stock.client_tab", "Mercado": "tables.stock.market_tab"}.get(source)
+    return tr(key) if key else source
+
 class _SubtotalRow(NamedTuple):
     """Per-profile subtotal injected after the last data row of a profile."""
     profile: str
@@ -180,7 +186,7 @@ class PurchaseTableWidget(QWidget):
                     row.profile,
                     row.material,
                     f"{row.length:.0f}",
-                    row.source,
+                    _source_label(row.source),
                     str(row.count),
                     f"{row.linear_m:.2f}",
                 ]

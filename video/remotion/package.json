@@ -1,0 +1,28 @@
+{
+  "name": "m13s-nest-demo-remotion",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "prepare-assets": "node scripts/prepare-assets.mjs",
+    "audio-assets": "uv run --no-project --with numpy --with soundfile --with scipy python ../sfx.py && uv run --no-project --with numpy --with soundfile --with librosa --with pyloudnorm python ../music.py",
+    "render": "npm run prepare-assets --silent && node scripts/render.mjs render",
+    "still": "npm run prepare-assets --silent && node scripts/render.mjs still"
+  },
+  "dependencies": {
+    "@react-three/fiber": "latest",
+    "@remotion/cli": "latest",
+    "@remotion/google-fonts": "latest",
+    "@remotion/noise": "^4.0.532",
+    "@remotion/three": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "remotion": "latest",
+    "three": "latest"
+  },
+  "devDependencies": {
+    "@types/react": "latest",
+    "@types/three": "latest",
+    "typescript": "latest"
+  }
+}

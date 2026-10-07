@@ -126,3 +126,23 @@ def test_english_report_title_replaces_default_portuguese_config_title():
     assert "<title>Cut Plan</title>" in html
     assert "Overall waste" in html
     assert "Plano de Corte" not in html
+
+
+def test_report_filter_all_is_translated():
+    from tekla_nest.i18n import tr
+
+    assert tr("report.filter.all") == "All profiles"
+    set_language("pt")
+    assert tr("report.filter.all") == "Todos os perfis"
+
+
+def test_purchase_source_and_insight_detail_are_localized():
+    from tekla_nest.i18n import tr
+    from tekla_nest.views.purchase_table import _source_label
+
+    assert _source_label("Cliente") == "Client"
+    assert _source_label("Mercado") == "Market"
+    assert tr("insights.high_waste.detail", waste_pct=39.38823529411765).startswith("39.4% waste")
+    set_language("pt")
+    assert _source_label("Cliente") == "Cliente"
+    assert tr("insights.high_waste.detail", waste_pct=39.38823529411765).startswith("39.4% de desperdício")

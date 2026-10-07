@@ -6,6 +6,8 @@ venv/
 *.egg-info/
 dist/
 build/
+node_modules/
+video/build/
 
 # Tooling
 .pytest_cache/

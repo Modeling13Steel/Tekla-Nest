@@ -190,14 +190,10 @@ insights:
     detail: "{piece_count} piece(s) didn't fit. Longest unfit: {length} mm."
   high_waste:
     title: "High waste on {profile}"
-    detail: "{waste_pct}% waste — consider stocking shorter bars."
+    detail: "{waste_pct:.1f}% waste — consider stocking shorter bars."
   mixed_materials:
     title: "Mixed materials on {profile}"
     detail: "{material_count} different materials used — re-group to reduce setup."
-
-report:
-  filter:
-    all: All profiles
 
 status:
   ready: Ready.
@@ -306,6 +302,8 @@ errors:
     license_key_required: License key is required.
 
 report:
+  filter:
+    all: All profiles
   title: Cut Plan
   logo_alt: M13S Nest logo
   generated_at: Generated at
@@ -485,8 +483,8 @@ tables:
     title: PARTS
     accessible_name: Parts table
     headers:
-      quantity: Quant.
-      length: Comp. (mm)
+      quantity: Qty
+      length: Length (mm)
       reference: Reference
       profile: Profile
       material: Material
@@ -506,8 +504,8 @@ tables:
     client_tab: Client
     table_accessible_name: "{title} table"
     headers:
-      quantity: Quant.
-      length: Comp. (mm)
+      quantity: Qty
+      length: Length (mm)
       priority: Reference
       profile: Profile
       material: Material

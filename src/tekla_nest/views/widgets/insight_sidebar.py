@@ -15,6 +15,7 @@ without the sidebar knowing about engine types.
 """
 from __future__ import annotations
 
+import re
 from collections.abc import Iterable
 
 from PySide6.QtCore import Qt, Signal
@@ -147,7 +148,7 @@ class InsightSidebar(QWidget):
         title_row.addWidget(title, stretch=1)
         layout.addLayout(title_row)
 
-        detail = QLabel(self._format(insight.detail_key, insight))
+        detail = QLabel(re.sub(r"(?<=\.)\s+", "\n", self._format(insight.detail_key, insight)))
         detail.setObjectName("insightDetail")
         detail.setWordWrap(True)
         set_ui_property(detail, "role", "helper")

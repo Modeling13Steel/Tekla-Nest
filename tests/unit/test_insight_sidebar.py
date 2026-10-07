@@ -72,3 +72,19 @@ def test_set_insights_clears_previous(qtbot, sidebar):
     qtbot.wait(20)  # flush deleteLater
     assert sidebar.findChild(object, "insight-a") is None
     assert sidebar.findChild(object, "insight-b") is not None
+
+
+def test_detail_puts_each_sentence_on_its_own_line(sidebar):
+    insight = Insight(
+        insight_id="add_stock:IPE100",
+        severity="warning",
+        title_key="insights.add_stock.title",
+        detail_key="insights.add_stock.detail",
+        context=(("profile", "IPE100"), ("length", 4200), ("piece_count", 2)),
+        action="request_stock",
+    )
+    sidebar.set_insights([insight])
+    detail = sidebar.findChild(object, "insightDetail").text()
+    assert ". " not in detail
+    first, second = detail.split("\n")
+    assert first.endswith(".") and second[:1].isupper()
