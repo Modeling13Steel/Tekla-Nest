@@ -876,8 +876,7 @@ python scripts/generate_keys.py
 firebase functions:secrets:set JWT_PRIVATE_KEY < keys/private_key.pem
 firebase deploy --only functions
 ```
-
-JWT signing-key rotation invalidates existing local license tokens. Rebuild and redistribute the desktop app because it embeds the new public key.
+JWT signing-key rotation invalidates existing local license tokens. Commit the new `src/tekla_nest/licensing/public_key.pem`, then rebuild and redistribute the desktop app because it embeds the new public key.
 
 ## Security rules
 
