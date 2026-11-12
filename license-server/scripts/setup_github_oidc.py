@@ -9,7 +9,7 @@ Creates (idempotent — safe to re-run):
   3. An IAM binding letting that repository impersonate the deployer SA.
   4. The GitHub Environment the deploy job is gated behind, with required
      reviewers (users only — pass --reviewer, or let it auto-infer the
-     repo's admin collaborators + the current `gh` user).
+     repo's admin collaboratshors + the current `gh` user).
 
 No JSON service-account key is ever created or downloaded — GitHub Actions
 authenticates by exchanging its own OIDC token for short-lived GCP
@@ -66,12 +66,11 @@ DEPLOYER_PROJECT_ROLES = [
     "roles/cloudbuild.builds.editor",
 ]
 
-
 def run(cmd: list[str], *, check: bool = True, capture: bool = False,
         input_data: str | None = None) -> subprocess.CompletedProcess:
     print(f"$ {' '.join(cmd)}")
-    return subprocess.run(cmd, check=check, cwd=ROOT, text=True, capture_output=capture, input=input_data)
-
+    resolved = [shutil.which(cmd[0]) or cmd[0], *cmd[1:]]
+    return subprocess.run(resolved, check=check, cwd=ROOT, text=True, capture_output=capture, input=input_data)
 
 def which(name: str) -> str | None:
     return shutil.which(name)
