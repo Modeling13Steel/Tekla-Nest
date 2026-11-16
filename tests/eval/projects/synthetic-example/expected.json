@@ -1,0 +1,5 @@
+{
+  "_note": "SYNTHETIC example that only proves the fixture loader works. Not a customer project; the competitor figure is invented.",
+  "kerf_mm": 3,
+  "competitor": {"purchased_m": 477.4, "bars": 40, "tool": "SYNTHETIC (invented number)"}
+}
