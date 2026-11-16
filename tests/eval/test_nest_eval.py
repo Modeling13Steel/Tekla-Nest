@@ -1,7 +1,9 @@
 """Regression gate for the nesting eval (see nest_eval.py).
 
 Correctness invariants must hold on every instance. Optimality thresholds
-are ratchets pinned just above the 2026-11 baseline (engine at b4c48c0):
+are ratchets pinned just above the 2026-11 column-generation engine
+(old FFD engine at b4c48c0 was 1-12% above optimum on small jobs, up to
+28.7% with client offcuts):
 tighten them when the engine improves, never loosen them to make a change
 pass.
 
@@ -26,40 +28,40 @@ from tests.eval.nest_eval import (
 from tests.eval.reference import StockType, solve
 
 # family -> (max mean gap to exact DP optimum %, max worst-case gap %)
-RATCHET = {"short": (2.0, 10.0), "mixed": (3.5, 13.0), "long": (0.5, 5.0)}
+RATCHET = {"short": (0.01, 0.01), "mixed": (0.01, 0.01), "long": (0.01, 0.01)}
 
 # family -> (max mean gap to the reference lower bound %, max worst-case %)
 LB_RATCHET = {
-    "short": (1.1, 4.8),
-    "mixed": (3.5, 12.8),
+    "short": (0.01, 0.01),
+    "mixed": (0.01, 0.01),
     "long": (0.01, 0.01),
-    "big-mixed": (2.2, 3.2),
-    "client": (11.5, 28.8),
-    "frame-medium": (0.2, 0.5),
-    "frame-offcuts-medium": (0.1, 0.2),
-    "hall-medium": (2.1, 2.7),
-    "hall-offcuts-medium": (2.4, 3.6),
-    "multi-medium": (0.4, 0.6),
-    "multi-offcuts-medium": (0.4, 0.9),
-    "secondary-medium": (0.3, 0.4),
+    "big-mixed": (0.15, 0.3),
+    "client": (0.01, 0.01),
+    "frame-medium": (0.01, 0.01),
+    "frame-offcuts-medium": (0.01, 0.01),
+    "hall-medium": (0.01, 0.01),
+    "hall-offcuts-medium": (0.01, 0.01),
+    "multi-medium": (0.01, 0.01),
+    "multi-offcuts-medium": (0.01, 0.01),
+    "secondary-medium": (0.01, 0.01),
     "secondary-offcuts-medium": (0.01, 0.01),
-    "project:synthetic-example": (0.5, 0.5),
+    "project:synthetic-example": (0.01, 0.01),
 }
 LB_RATCHET_SLOW = {
-    "short": (1.7, 10.0),
-    "mixed": (3.0, 12.8),
-    "long": (0.4, 4.8),
-    "big-mixed": (2.2, 4.8),
-    "client": (9.8, 28.8),
-    "frame-full": (0.2, 0.2),
-    "frame-offcuts-full": (0.45, 0.6),
-    "hall-full": (1.1, 1.4),
-    "hall-offcuts-full": (1.4, 1.6),
-    "multi-full": (0.6, 0.9),
-    "multi-offcuts-full": (1.7, 2.1),
-    "secondary-full": (0.1, 0.11),
-    "secondary-offcuts-full": (0.3, 0.45),
-    "project:synthetic-example": (0.5, 0.5),
+    "short": (0.01, 0.01),
+    "mixed": (0.01, 0.01),
+    "long": (0.01, 0.01),
+    "big-mixed": (0.1, 0.3),
+    "client": (0.01, 0.01),
+    "frame-full": (0.01, 0.05),
+    "frame-offcuts-full": (0.01, 0.05),
+    "hall-full": (0.02, 0.15),
+    "hall-offcuts-full": (0.02, 0.05),
+    "multi-full": (0.01, 0.03),
+    "multi-offcuts-full": (0.01, 0.05),
+    "secondary-full": (0.01, 0.01),
+    "secondary-offcuts-full": (0.01, 0.06),
+    "project:synthetic-example": (0.01, 0.01),
 }
 
 
@@ -148,7 +150,9 @@ def test_gap_to_lb_ratchet(scores, family):
 
 
 def test_runtime_budget(scores):
-    assert max(s.ms for s in scores) < 500
+    # Wall-clock per project (all profile groups), ~2x the measured max so
+    # machine noise doesn't flake; the app runs this in a QThread.
+    assert max(s.ms for s in scores) < 2500
 
 
 def test_project_fixture_loader(scores):
@@ -176,4 +180,5 @@ def test_slow_gap_to_lb_ratchet(slow_scores, family):
 
 @pytest.mark.eval_slow
 def test_slow_runtime_budget(slow_scores):
-    assert max(s.ms for s in slow_scores) < 3000
+    # ~3000-piece projects: p50 1-2.5 s, noisy max ~4.7 s on a laptop.
+    assert max(s.ms for s in slow_scores) < 6000

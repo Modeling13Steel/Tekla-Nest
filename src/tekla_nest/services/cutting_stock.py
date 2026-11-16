@@ -600,44 +600,50 @@ class CuttingStock:
         return None
 
     def _pack(self, items: list[float], caps: list[float], budget: list[int]) -> list[int] | None:
-        """Bin-packing feasibility DFS: items (descending) into bins ``caps``."""
+        """Bin-packing feasibility DFS: items (descending) into bins ``caps``.
+
+        Runs in integer micro-units (1/1000 mm): items rounded up, caps down,
+        so a "fits" answer is never optimistic and memo keys need no rounding.
+        """
         n, m = len(items), len(caps)
+        items = [math.ceil(x * 1000 - 1e-6) for x in items]
+        caps = [math.floor(c * 1000 + 1e-6) for c in caps]
         slack = sum(caps) - sum(items)
-        if slack < -EPS:
+        if slack < 0:
             return None
         smallest = items[-1]
-        loads = [0.0] * m
+        loads = [0] * m
         where = [0] * n
         failed: set = set()
 
-        def dfs(i: int, waste: float) -> bool:
+        def dfs(i: int, waste: int) -> bool:
             if i == n:
                 return True
             budget[0] -= 1
             if budget[0] < 0:
                 raise _Budget
-            sig = (i, tuple(sorted(zip(caps, (round(v, 6) for v in loads), strict=True))))
+            sig = (i, tuple(sorted(zip(caps, loads, strict=True))))
             if sig in failed:
                 return False
             w = items[i]
-            cand: list[tuple[float, int]] = []
+            cand: list[tuple[int, int]] = []
             seen = set()
             for b in range(m):
                 free = caps[b] - loads[b]
-                if free + EPS < w:
+                if free < w:
                     continue
-                if free - w <= EPS:  # exact fill dominates every other choice
-                    cand = [(0.0, b)]
+                if free == w:  # exact fill dominates every other choice
+                    cand = [(0, b)]
                     break
-                s = (caps[b], round(loads[b], 6))
+                s = (caps[b], loads[b])
                 if s not in seen:
                     seen.add(s)
                     cand.append((free, b))
             cand.sort()  # best fit first
             for _, b in cand:
                 after = caps[b] - loads[b] - w
-                nw = waste + (after if after + EPS < smallest else 0.0)
-                if nw > slack + EPS:
+                nw = waste + (after if after < smallest else 0)
+                if nw > slack:
                     continue
                 loads[b] += w
                 where[i] = b
