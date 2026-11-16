@@ -515,6 +515,8 @@ tables:
     tabs_description: Market and client stock tables
     market_tab: Market
     client_tab: Client
+    end_trim: "Spare {mm} mm / bar"
+    end_trim_tip: "Reserve {mm} mm on every factory bar in case its end is not cut square. Client offcuts are not trimmed. Purchase lengths stay the same."
     table_accessible_name: "{title} table"
     headers:
       quantity: Quant.

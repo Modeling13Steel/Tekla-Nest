@@ -14,7 +14,7 @@ priority sum; least stock length; least scrap; biggest reusable offcuts.
 from __future__ import annotations
 
 from collections import deque
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from ..models import BarResult, CutPiece, ProfileResult, StockBar
 from .cutting_stock import EPS, CuttingStock, Stock
@@ -37,6 +37,8 @@ class NestEngine:
     kerf_width: float = 0.0
     scrap_threshold: float = 2000.0
     max_strategies: int = 6
+    end_trim: float = 0.0
+    """mm reserved on every factory (non-client) bar for an uneven end."""
     last_lower_bound: float | None = field(default=None, init=False, compare=False)
     last_proven_optimal: bool = field(default=False, init=False, compare=False)
 
@@ -70,6 +72,7 @@ class NestEngine:
 
         self._validate_inputs(pieces, bars)
         k = self.kerf_width
+        trim = {id(b): self._trim(b) for b in bars}
 
         # Stock types, in preference order (free first, then priority, length).
         groups: dict[tuple, list] = {}
@@ -81,11 +84,13 @@ class NestEngine:
             key=lambda g: (self._cost(g[0]), g[0].priority, g[0].length, g[2]),
         )
         stock_bars = [g[0] for g in reps]
-        stocks = [Stock(b.length + k, self._cost(b), q, b.priority, b.length)
+        stocks = [Stock(b.length - trim[id(b)] + k, self._cost(b), q, b.priority, b.length)
                   for b, q, _ in reps]
 
         # Piece types by length, longest first; marks are re-attached at the end.
-        max_len = max(b.length for b in bars)
+        max_len = max(b.length - trim[id(b)] for b in bars)
+        usable_bars = [replace(b, length=b.length - trim[id(b)]) if trim[id(b)] else b
+                       for b in bars]
         queues: dict[float, deque[int]] = {}  # length -> piece indices, input order
         oversize: list[int] = []
         for i, p in enumerate(pieces):
@@ -109,7 +114,7 @@ class NestEngine:
             for strategy_idx in range(min(self.max_strategies, 6)):
                 legacy, _ = self._calculate_cuts(
                     self._sort_pieces(fitting, strategy_idx),
-                    self._sort_bars(list(bars), strategy_idx),
+                    self._sort_bars(list(usable_bars), strategy_idx),
                 )
                 pats = []
                 for b in legacy:
@@ -131,6 +136,7 @@ class NestEngine:
                 material=sb.material,
                 source=sb.source,
                 priority=sb.priority,
+                end_trim=self._trim(sb),
             )
             for t, a in enumerate(pat):
                 for _ in range(a):
@@ -144,7 +150,7 @@ class NestEngine:
         unfit = [pieces[i] for i in sorted(oversize + [i for q in queues.values() for i in q])]
 
         total_stock = sum(b.original_length for b in result_bars)
-        total_waste = sum(b.free_length for b in result_bars)
+        total_waste = sum(b.free_length + b.end_trim for b in result_bars)
         scrap_waste = sum(
             b.free_length for b in result_bars
             if b.free_length <= self.scrap_threshold
@@ -168,6 +174,12 @@ class NestEngine:
     def _cost(bar: StockBar) -> float:
         """Purchase cost: client stock is already in the yard."""
         return 0.0 if bar.source == CLIENT_SOURCE else bar.length
+
+    def _trim(self, bar: StockBar) -> float:
+        """Client offcuts were cut in the shop; only factory ends are uneven."""
+        if bar.source == CLIENT_SOURCE or bar.length <= self.end_trim:
+            return 0.0
+        return self.end_trim
 
     # ── Legacy FFD (seed candidates) ─────────────────────────
 

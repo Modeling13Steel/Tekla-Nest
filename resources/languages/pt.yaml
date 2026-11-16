@@ -515,6 +515,8 @@ tables:
     tabs_description: Tabelas de stock de mercado e cliente
     market_tab: Mercado
     client_tab: Cliente
+    end_trim: "Reservar {mm} mm / barra"
+    end_trim_tip: "Reservar {mm} mm em cada barra de fábrica caso o topo não venha bem cortado. As sobras do cliente não são aparadas. Os comprimentos de compra mantêm-se."
     table_accessible_name: "Tabela {title}"
     headers:
       quantity: Quant.

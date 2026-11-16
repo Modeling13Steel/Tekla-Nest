@@ -61,6 +61,7 @@ class AppConfig:
     kerf_width: float = 0.0
     scrap_threshold: float = 2000.0
     max_strategies: int = 6
+    end_trim: float = 100.0  # mm reserved per factory bar when the UI tickbox is on
 
     # Stock defaults
     hot_rolled_families: list[str] = field(
@@ -268,6 +269,7 @@ def load_config(path: str | None = None) -> AppConfig:
         "kerf_width": ("kerf_width", _float),
         "scrap_threshold": ("scrap_threshold", _float),
         "max_strategies": ("max_strategies", _int),
+        "end_trim": ("end_trim", _float),
     }, base_dir)
 
     # ── stock_defaults section (nested) ──

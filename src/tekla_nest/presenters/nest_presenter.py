@@ -419,6 +419,10 @@ class NestPresenter(QObject):
 
     # ── Optimization ─────────────────────────────────────────
 
+    def set_end_trim(self, enabled: bool) -> None:
+        """Reserve ``nesting.end_trim`` mm on every factory bar (uneven ends)."""
+        self._engine.end_trim = get_config().end_trim if enabled else 0.0
+
     def run_optimization(self) -> None:
         """Run nesting for all profiles.
 
@@ -472,6 +476,7 @@ class NestPresenter(QObject):
             kerf_width=self._engine.kerf_width,
             scrap_threshold=self._engine.scrap_threshold,
             max_strategies=self._engine.max_strategies,
+            end_trim=self._engine.end_trim,
         )
         thread = QThread(self)
         self._async_threads.append(thread)
@@ -1009,6 +1014,7 @@ class _OptimizationWorker(QObject):
         kerf_width: float,
         scrap_threshold: float,
         max_strategies: int,
+        end_trim: float = 0.0,
     ) -> None:
         super().__init__()
         self._parts = parts
@@ -1018,6 +1024,7 @@ class _OptimizationWorker(QObject):
             kerf_width=kerf_width,
             scrap_threshold=scrap_threshold,
             max_strategies=max_strategies,
+            end_trim=end_trim,
         )
 
     @Slot()
