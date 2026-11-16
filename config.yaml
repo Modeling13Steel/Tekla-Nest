@@ -2,7 +2,6 @@ app:
   title: "M13S Nest"
   logo: "resources/logo_outline.png"
   icon: "resources/logo_cut_bar_mark.ico"
-  version: "2.0.0"
   language: "pt"
 
 theme:

@@ -46,7 +46,7 @@ folder (not a uv workspace member — it has its own Python dependencies via
 | `make build` | Build wheel + sdist. |
 | `make binary` / `make binary-admin` | Standalone PyInstaller executables. |
 | `make installer` / `make installer-admin` | Windows installers (needs Inno Setup, `iscc` on PATH). |
-| `make installers` | Both installers in one step. |
+| `make installers` | Both installers in one step. The version comes only from `pyproject.toml` (passed as `iscc /DMyAppVersion=...`; plain `iscc installer.iss` fails on purpose). Setup refuses to downgrade a newer install unless run with `/VERYSILENT /ALLOWDOWNGRADE`, asks to close a running app (`AppMutex`), and wipes the old `_internal`/`python` bundle dirs before copying; user data in `~/.teklanest` / `~/.tekla_nest` is untouched. |
 | `make python-embed` | Windows only: prepare the bundled Python + pythonnet used inside the installer (see [Getting started](getting-started.md#4-windows-notes-path-shims-venvs)). |
 | `make infrastructure-package` | Zip `license-server/` (minus secrets/venv) for distribution. |
 | `make deploy-infrastructure` | Deploy the license-server Firebase infrastructure — see [Infrastructure](infrastructure.md). Runs `python3.12 scripts/deploy.py`; on Windows run that script directly with `py -3.12 scripts\deploy.py`. |

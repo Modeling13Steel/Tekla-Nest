@@ -95,6 +95,7 @@ dialogs:
     close_guard_text: "Optimization results have not been exported. Export before closing?"
     configuration_error_title: Configuration Error
     license_issue_title: License Issue
+    app_already_running: "The application is already running."
     export_title: Export
     pdf_saved: "PDF saved to:\n{path}"
     excel_saved: "Excel saved to:\n{path}"

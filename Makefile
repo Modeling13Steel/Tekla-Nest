@@ -152,13 +152,13 @@ ifeq ($(OS),Windows_NT)
 		powershell -ExecutionPolicy Bypass -File scripts/prepare-python-embed.ps1 \
 	)
 endif
-	iscc installer.iss
+	iscc /DMyAppVersion=$(VERSION) installer.iss
 	@echo ""
 	@echo "✔ Installer ready: $(DIST_DIR)/tekla-nest-setup.exe"
 
 .PHONY: installer-admin
 installer-admin: binary-admin-dir ## Build Windows admin installer (requires Inno Setup: iscc on PATH)
-	iscc installer-admin.iss
+	iscc /DMyAppVersion=$(VERSION) installer-admin.iss
 	@echo ""
 	@echo "✔ Admin installer ready: $(DIST_DIR)/tekla-nest-admin-setup.exe"
 
