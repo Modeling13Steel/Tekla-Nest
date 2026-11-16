@@ -66,6 +66,40 @@ make test          # QT_QPA_PLATFORM=offscreen uv run pytest
   block waiting for a click.
 - Windows/Tekla-specific tests are marked `windows_only` and skipped off Windows:
   `uv run pytest -m "not windows_only"`.
+- `pyproject.toml` sets `addopts = -m 'not eval_slow'`. Any `-m` you pass replaces it, so
+  combine them: `-m "not windows_only and not eval_slow"`.
+
+## Nesting eval
+
+`tests/eval/` measures how close the nesting engine is to the true optimum. It runs instances
+through the real app path (`NestPresenter._compute_nest_result`) and compares the purchased
+market metres with a reference solver (`tests/eval/reference.py`, dev-only, scipy/HiGHS):
+column generation gives a valid **lower bound**, and a MILP over the generated patterns (all
+patterns on small instances) gives a **best-known** plan. When the two meet, the optimum is
+**proven**. Nothing under `src/` imports scipy.
+
+```bash
+make eval                                         # all suites, table per family/project
+uv run python -m tests.eval.nest_eval --suite full --seeds 3 --json new.json --compare old.json
+uv run pytest tests/eval                          # fast gate (~15 s, runs by default)
+make eval-slow                                    # heavy gate: pytest tests/eval -m eval_slow (~75 s)
+```
+
+- Suites: `small` (random single-profile families), `medium` / `full` (realistic jobs from
+  `tests/eval/projects.py`: building frame, portal hall, secondary steel, multi-profile project,
+  each with and without client offcuts, kerf 3-5 mm, up to ~3000 pieces), `projects` (fixtures).
+- The gate always checks invariants (every piece placed once, no overfill, stock availability,
+  no purchase below the lower bound). It also checks ratchets on the gap to the lower bound
+  (`LB_RATCHET*` in `test_nest_eval.py`). Tighten the ratchets when the engine improves. Never
+  loosen them.
+- Market stock is the config lengths, with the quantity raised to the group's piece count so
+  the app default of 100 per length never binds.
+- **Real projects:** create `tests/eval/projects/<name>/` with the app's `parts.csv`, an
+  optional client `stock.csv`, and an optional `expected.json`
+  (`{"kerf_mm": 3, "competitor": {"purchased_m": 412.3, "bars": 37, "tool": "..."}}`). Then run
+  `--suite projects` to get ours vs competitor vs lower bound. A competitor below the lower
+  bound means it solved a different problem (kerf, stock lengths, trim). `synthetic-example/`
+  is invented data that only shows the format.
 
 ## Code quality
 

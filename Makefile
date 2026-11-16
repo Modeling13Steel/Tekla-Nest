@@ -47,6 +47,14 @@ test-fast: ## Run tests without verbose output
 test-cov: ## Run tests with coverage report (install pytest-cov first)
 	uv run pytest --cov=tekla_nest --cov-report=term-missing
 
+.PHONY: eval
+eval: ## Nesting eval vs reference solver, all suites (or: make eval ARGS="--suite projects --json out.json")
+	$(PYTHON) -m tests.eval.nest_eval $(or $(ARGS),--suite all --seeds 3)
+
+.PHONY: eval-slow
+eval-slow: ## Heavy nesting eval gate (full-size projects, MILP)
+	uv run pytest tests/eval -q -m eval_slow
+
 .PHONY: lint
 lint: ## Run ruff linter (install ruff first)
 	uvx ruff check src/ tests/
