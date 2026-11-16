@@ -610,7 +610,7 @@ class NestPresenter(QObject):
             self._fail_operation(operation, f"Failed to export PDF: {redact(exc)}")
             return False
 
-    def export_excel(self, path: str, scope=None) -> bool:
+    def export_excel(self, path: str, scope=None, purchase_only: bool = False) -> bool:
         """Save the current result as an Excel workbook. Returns True on success."""
         operation = "export_excel"
         if not self._begin_operation(operation, target=path):
@@ -631,6 +631,7 @@ class NestPresenter(QObject):
                 scope=scope,
                 project_name=self._project_name,
                 milestone=self._milestone,
+                purchase_only=purchase_only,
             )
             self._result_exported = True
             self._complete_operation(operation)

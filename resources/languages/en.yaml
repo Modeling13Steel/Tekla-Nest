@@ -105,6 +105,7 @@ dialogs:
     title: Choose profiles to export
     prompt: "Pick which (profile · material) groups to include:"
     empty_warn: "Select at least one profile to export."
+    purchase_only: "Purchase list only (market bars, supplier format)"
   milestone:
     title: Milestone
     label: "Milestone / revision label (leave blank to omit):"
@@ -336,6 +337,7 @@ report:
     scrap_pct: Scrap %
     total: TOTAL
     purchase_sheet: Purchase
+    order_title: Purchase list
     linear_meters: Linear m
     site_image_sheet: Site Image
   prep:

@@ -105,6 +105,7 @@ dialogs:
     title: Escolher perfis a exportar
     prompt: "Selecione os grupos (perfil · material) a incluir:"
     empty_warn: "Selecione pelo menos um perfil para exportar."
+    purchase_only: "Apenas lista de compra (barras de mercado, formato fornecedor)"
   milestone:
     title: Marco
     label: "Marco / revisão (deixe em branco para omitir):"
@@ -336,6 +337,7 @@ report:
     scrap_pct: Sobra %
     total: TOTAL
     purchase_sheet: Compras
+    order_title: Lista de compra
     linear_meters: Metros lineares
     site_image_sheet: Imagem do Local
   prep:

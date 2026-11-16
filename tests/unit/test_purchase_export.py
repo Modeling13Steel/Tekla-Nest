@@ -181,3 +181,24 @@ def test_excel_per_material_sheets_do_not_collide(tmp_path):
     values = {cell.value for row in ws.iter_rows() for cell in row}
     assert "HEA240 — S235JR" in values
     assert "HEA240 — S275JR" in values
+
+
+def test_excel_purchase_only_is_single_supplier_sheet(tmp_path):
+    result = _multi_material_result()
+    result.profiles[0].bars.append(
+        BarResult(original_length=6000, mark="HEA240", material="S235JR",
+                  source="Cliente", cuts=[1000], cut_marks=["A3"]))
+    path = export_excel(result, tmp_path / "compra.xlsx",
+                        project_name="P1", milestone="RC1", purchase_only=True)
+    wb = load_workbook(path)
+    assert wb.sheetnames == ["Purchase"]
+    rows = [r for r in wb.active.iter_rows(values_only=True) if any(r)]
+    assert rows[0][0] == "Purchase list"
+    assert ("Project Name: P1",) == rows[2][:1] and rows[3][0] == "Milestone: RC1"
+    assert rows[4] == ("Profile", "Material", "Length (mm)", "Count", "Linear m")
+    body = [r for r in rows[5:] if r[2] is not None]
+    # Client bar excluded: HEA240/S235JR stays 2 x 6000.
+    assert ("HEA240", "S235JR", 6000, 2, 12.0) in body
+    assert ("HEA240", "S275JR", 12000, 1, 12.0) in body
+    assert ("IPE200", "S355JR", 6000, 1, 6.0) in body
+    assert rows[-1] == ("TOTAL", None, None, 4, 30.0)

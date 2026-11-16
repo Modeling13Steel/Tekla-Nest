@@ -52,4 +52,7 @@ def report_labels(config: AppConfig) -> SimpleNamespace:
         site_image_sheet=tr("report.excel.site_image_sheet"),
         project_name_label=tr("report.project_name_label"),
         milestone_label=tr("report.milestone_label"),
+        order_title=tr("report.excel.order_title"),
+        length_mm=tr("purchase.headers.length_mm"),
+        quantity=tr("purchase.headers.count"),
     )

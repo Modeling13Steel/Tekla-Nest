@@ -25,6 +25,9 @@ def fake_file_dialog(monkeypatch):
     monkeypatch.setattr(nest_dialogs.QFileDialog, "getSaveFileName", fake_save)
     monkeypatch.setattr(nest_dialogs.QMessageBox, "information", lambda *a, **k: None)
     monkeypatch.setattr(nest_dialogs.QInputDialog, "getText", lambda *a, **k: ("RC1", True))
+    monkeypatch.setattr(
+        nest_dialogs.QDialog, "exec", lambda self: nest_dialogs.QDialog.DialogCode.Accepted
+    )
     return open_calls, save_calls
 
 
@@ -58,6 +61,7 @@ def test_prompt_export_pdf_returns_empty_on_failure(qtbot, fake_file_dialog):
 
 def test_prompt_export_excel_returns_path_on_success(qtbot, fake_file_dialog):
     presenter = MagicMock()
+    presenter.milestone = ""
     presenter.export_excel.return_value = True
     assert nest_dialogs.prompt_export_excel(None, presenter) == "/tmp/pretend.out"
 
@@ -78,7 +82,11 @@ def test_prompt_handles_cancel(qtbot, monkeypatch):
     monkeypatch.setattr(
         nest_dialogs.QInputDialog, "getText", lambda *a, **k: ("", True)
     )
+    monkeypatch.setattr(
+        nest_dialogs.QDialog, "exec", lambda self: nest_dialogs.QDialog.DialogCode.Accepted
+    )
     presenter = MagicMock()
+    presenter.milestone = ""
     nest_dialogs.prompt_load_parts_csv(None, presenter)
     nest_dialogs.prompt_load_stock_csv(None, presenter)
     assert presenter.load_parts_from_csv.call_count == 0
@@ -86,3 +94,20 @@ def test_prompt_handles_cancel(qtbot, monkeypatch):
     assert nest_dialogs.prompt_export_pdf(None, presenter) == ""
     assert nest_dialogs.prompt_export_excel(None, presenter) == ""
     assert nest_dialogs.prompt_export_csv(None, presenter) == ""
+
+
+def test_prompt_export_excel_purchase_only_tickbox(qtbot, fake_file_dialog, monkeypatch):
+    """The Excel dialog carries a 'purchase list only' tickbox; ticking it
+    reaches the presenter."""
+    from PySide6.QtWidgets import QCheckBox
+
+    def tick_and_accept(dlg):
+        dlg.findChild(QCheckBox, "purchaseOnlyCheck").setChecked(True)
+        return nest_dialogs.QDialog.DialogCode.Accepted
+
+    monkeypatch.setattr(nest_dialogs.QDialog, "exec", tick_and_accept)
+    presenter = MagicMock()
+    presenter.milestone = ""
+    presenter.export_excel.return_value = True
+    assert nest_dialogs.prompt_export_excel(None, presenter) == "/tmp/pretend.out"
+    assert presenter.export_excel.call_args.kwargs["purchase_only"] is True

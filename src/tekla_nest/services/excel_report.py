@@ -23,6 +23,7 @@ def export_excel(
     attached_image_path: str | Path | None = None,
     project_name: str = "",
     milestone: str = "",
+    purchase_only: bool = False,
 ) -> Path:
     """Write nesting results to an Excel workbook.
 
@@ -31,6 +32,9 @@ def export_excel(
            with data/strip rows, unfit pieces, and optional site image.
         2. Purchase — aggregation suitable for ordering
            (profile × material × bar length × count + linear-metre subtotals).
+
+    ``purchase_only=True`` writes a single supplier order sheet instead
+    (market bars only: client stock is not bought).
 
     Returns the resolved output path.
     """
@@ -49,6 +53,10 @@ def export_excel(
     from .bar_aggregation import aggregate_prep, filter_result  # noqa: PLC0415
     result = filter_result(result, scope)
     wb = Workbook()
+
+    if purchase_only:
+        _write_order_sheet(wb.active, result, cfg, labels, project_name, milestone)
+        return _save(wb, output_path)
 
     # ── Summary sheet ─────────────────────────────────────────
     ws_summary = wb.active
@@ -270,7 +278,10 @@ def export_excel(
 
     # ── Purchase sheet (feedback #10) ─────────────────────────
     _write_purchase_sheet(wb, result, cfg, labels, header_font, header_fill, wrap)
+    return _save(wb, output_path)
 
+
+def _save(wb, output_path: str | Path) -> Path:
     out = Path(output_path)
     out.parent.mkdir(parents=True, exist_ok=True)
     try:
@@ -366,6 +377,81 @@ def _write_purchase_sheet(wb, result, cfg, labels,
     cell.alignment = Alignment(horizontal="right")
     ws.cell(row=row, column=5, value=round(grand_total_m, 2)).font = bold
 
+    _auto_column_width(ws)
+
+
+def _write_order_sheet(ws, result, cfg, labels, project_name: str, milestone: str) -> None:
+    """Supplier order sheet: header block, then one line per bar to buy.
+
+    Profile | Material | Length (mm) | Qty | Linear m, subtotal per
+    (profile, material), grand total. Only ``Mercado`` bars: client stock
+    is already in the yard.
+    """
+    from openpyxl.styles import Alignment, Font, PatternFill
+
+    from .bar_aggregation import aggregate_purchase  # noqa: PLC0415
+
+    bold = Font(bold=True)
+    header_font = Font(bold=True, color="FFFFFF")
+    header_fill = PatternFill("solid", fgColor=cfg.primary_color.lstrip("#"))
+    ws.title = labels.purchase_sheet[:31]
+
+    ws.cell(row=1, column=1, value=labels.order_title).font = Font(bold=True, size=14)
+    ws.cell(row=2, column=1, value=cfg.company_name).font = bold
+    ws.cell(row=2, column=5, value=datetime.now().strftime("%Y-%m-%d"))
+    row = 3
+    for label, value in ((labels.project_name_label, project_name),
+                         (labels.milestone_label, milestone)):
+        if value:
+            ws.cell(row=row, column=1, value=f"{label}: {value}")
+            row += 1
+    row += 1
+
+    headers = [labels.profile, labels.material, labels.length_mm,
+               labels.quantity, labels.linear_meters]
+    for col, h in enumerate(headers, 1):
+        cell = ws.cell(row=row, column=col, value=h)
+        cell.font = header_font
+        cell.fill = header_fill
+    ws.freeze_panes = ws.cell(row=row + 1, column=1)
+    row += 1
+
+    rows = [r for r in aggregate_purchase(result) if r.source == "Mercado"]
+    if not rows:
+        ws.cell(row=row, column=1, value=labels.no_stock)
+        _auto_column_width(ws)
+        return
+
+    groups: dict[tuple[str, str], list] = {}
+    for r in rows:  # aggregate_purchase is already sorted profile/material/length desc
+        groups.setdefault((r.profile, r.material), []).append(r)
+
+    grand_qty, grand_m = 0, 0.0
+    for (profile, material), items in groups.items():
+        for r in items:
+            ws.cell(row=row, column=1, value=profile)
+            ws.cell(row=row, column=2, value=material)
+            ws.cell(row=row, column=3, value=int(r.length) if r.length.is_integer() else r.length)
+            ws.cell(row=row, column=4, value=r.count)
+            ws.cell(row=row, column=5, value=round(r.linear_m, 2)).number_format = "0.00"
+            row += 1
+        qty = sum(r.count for r in items)
+        metres = sum(r.linear_m for r in items)
+        label = f"{labels.total} {profile}" + (f" / {material}" if material else "")
+        cell = ws.cell(row=row, column=1, value=label)
+        cell.font = bold
+        cell.alignment = Alignment(horizontal="right")
+        ws.cell(row=row, column=4, value=qty).font = bold
+        c = ws.cell(row=row, column=5, value=round(metres, 2))
+        c.font, c.number_format = bold, "0.00"
+        row += 2
+        grand_qty += qty
+        grand_m += metres
+
+    ws.cell(row=row, column=1, value=labels.total).font = bold
+    ws.cell(row=row, column=4, value=grand_qty).font = bold
+    c = ws.cell(row=row, column=5, value=round(grand_m, 2))
+    c.font, c.number_format = bold, "0.00"
     _auto_column_width(ws)
 
 
