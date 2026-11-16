@@ -12,6 +12,7 @@ import sys
 
 from PySide6.QtWidgets import QApplication, QMessageBox
 
+from . import single_instance
 from .config.app_config import AppConfig, ConfigError, load_config
 from .presenters.nest_presenter import NestPresenter
 from .services.theme_service import ThemeService
@@ -110,6 +111,12 @@ def main() -> None:
     app = QApplication(sys.argv)
     app.setApplicationName(cfg.title)
     app.setApplicationVersion(cfg.version)
+
+    if not single_instance.acquire(single_instance.MAIN_APP_MUTEX):
+        from .i18n import tr
+
+        QMessageBox.information(None, cfg.title, tr("dialogs.messages.app_already_running"))
+        sys.exit(0)
 
     if config_error is not None:
         QMessageBox.warning(
