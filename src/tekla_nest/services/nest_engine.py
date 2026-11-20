@@ -1,113 +1,187 @@
-"""Core 1D bin-packing optimizer using multi-strategy First Fit Decreasing.
+"""1D cutting optimizer for one (profile, material) group.
 
-Migrated from: C# FrmNest.otimizar() + CalculateCuts()
-All static mutable state eliminated — everything is instance or local.
+``NestEngine.optimize`` groups pieces into length types and stock into
+types, then runs the multiple-stock-size cutting stock portfolio in
+:mod:`.cutting_stock` (column-generation LP bound, residual rounding, exact
+search for small instances / residuals, 2-3 bar exact local search). The
+legacy multi-strategy First Fit Decreasing (migrated from C#
+FrmNest.otimizar() + CalculateCuts()) still runs as a seed candidate.
+
+Objective, lexicographic: fewest unfit pieces; least purchased (non
+"Cliente") stock length -- client stock is free; fewest bars; lowest
+priority sum; least stock length; least scrap; biggest reusable offcuts.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from collections import deque
+from dataclasses import dataclass, field, replace
 
 from ..models import BarResult, CutPiece, ProfileResult, StockBar
+from .cutting_stock import EPS, CuttingStock, Stock
+
+CLIENT_SOURCE = "Cliente"
 
 
 @dataclass
 class NestEngine:
-    """1D bin-packing optimizer.
+    """1D cutting stock optimizer.
 
     Usage::
 
         engine = NestEngine(kerf_width=5.0)
         result = engine.optimize(pieces, bars)
+        engine.last_lower_bound    # LP bound on purchased mm (None if unknown)
+        engine.last_proven_optimal # True when the plan provably hits the optimum
     """
 
     kerf_width: float = 0.0
     scrap_threshold: float = 2000.0
     max_strategies: int = 6
+    end_trim: float = 0.0
+    """mm reserved on every factory (non-client) bar for an uneven end."""
+    last_lower_bound: float | None = field(default=None, init=False, compare=False)
+    last_proven_optimal: bool = field(default=False, init=False, compare=False)
 
     def optimize(
         self,
         pieces: list[CutPiece],
         bars: list[StockBar],
     ) -> ProfileResult | None:
-        """Run multi-strategy optimization.
+        """Find the cheapest cut plan.
 
         Args:
             pieces: Expanded list of desired cuts (one per physical piece).
-            bars:   Expanded list of available stock bars (one per physical bar),
-                    pre-sorted by priority.
+            bars:   Expanded list of available stock bars (one per physical
+                    bar). Each result bar takes the length/mark/material/
+                    source/priority of one of these, and quantities are
+                    respected.
 
         Returns:
-            ProfileResult with the best solution found across strategies. If
-            no piece could be fitted in any strategy, the result will have
-            empty ``bars`` and all pieces listed in ``unfit_pieces``.
-            Returns None only when ``pieces`` or ``bars`` is empty.
+            ProfileResult with the best plan. Pieces longer than every bar,
+            or left over when stock runs out, are listed in ``unfit_pieces``
+            next to the partial plan. Returns None only when ``pieces`` or
+            ``bars`` is empty.
 
         Raises:
             NestError: If inputs are structurally invalid (negative lengths, etc.).
         """
+        self.last_lower_bound = None
+        self.last_proven_optimal = False
         if not pieces or not bars:
             return None
 
         self._validate_inputs(pieces, bars)
+        k = self.kerf_width
+        trim = {id(b): self._trim(b) for b in bars}
 
-        strategy_count = min(self.max_strategies, 6)
-        solutions: list[_Solution] = []
-
-        for strategy_idx in range(strategy_count):
-            sorted_pieces = self._sort_pieces(pieces, strategy_idx)
-            sorted_bars = self._sort_bars(list(bars), strategy_idx)
-
-            result_bars, unfit = self._calculate_cuts(sorted_pieces, sorted_bars)
-
-            total_stock = sum(b.original_length for b in result_bars)
-            total_waste = sum(b.free_length for b in result_bars)
-            scrap_waste = sum(
-                b.free_length for b in result_bars
-                if b.free_length <= self.scrap_threshold
-            )
-
-            if total_stock > 0:
-                waste_pct = (total_waste / total_stock) * 100.0
-                scrap_pct = (scrap_waste / total_stock) * 100.0
-            else:
-                waste_pct = 100.0 if unfit else 0.0
-                scrap_pct = 0.0
-
-            last_remnant = result_bars[-1].free_length if result_bars else 0.0
-            solutions.append(_Solution(
-                bars=sorted(result_bars, key=lambda b: b.free_length),
-                waste_pct=waste_pct,
-                scrap_pct=scrap_pct,
-                last_remnant=last_remnant,
-                unfit=list(unfit),
-            ))
-
-        if not solutions:
-            return None
-
-        best = min(
-            solutions,
-            key=lambda s: (
-                len(s.unfit),
-                # Feedback #11 — prefer solutions that consume the
-                # highest-priority stock (most-negative priority value).
-                # Sum priorities of bars actually used: lower sum = more
-                # client/priority bars used.
-                sum(b.priority for b in s.bars),
-                s.waste_pct,
-                -s.last_remnant,
-            ),
+        # Stock types, in preference order (free first, then priority, length).
+        groups: dict[tuple, list] = {}
+        for i, b in enumerate(bars):
+            g = groups.setdefault((b.length, b.mark, b.material, b.source, b.priority), [b, 0, i])
+            g[1] += 1
+        reps = sorted(
+            groups.values(),
+            key=lambda g: (self._cost(g[0]), g[0].priority, g[0].length, g[2]),
         )
+        stock_bars = [g[0] for g in reps]
+        stocks = [Stock(b.length - trim[id(b)] + k, self._cost(b), q, b.priority, b.length)
+                  for b, q, _ in reps]
+
+        # Piece types by length, longest first; marks are re-attached at the end.
+        max_len = max(b.length - trim[id(b)] for b in bars)
+        usable_bars = [replace(b, length=b.length - trim[id(b)]) if trim[id(b)] else b
+                       for b in bars]
+        queues: dict[float, deque[int]] = {}  # length -> piece indices, input order
+        oversize: list[int] = []
+        for i, p in enumerate(pieces):
+            if p.length > max_len + EPS:
+                oversize.append(i)
+            else:
+                queues.setdefault(p.length, deque()).append(i)
+        lengths = sorted(queues, reverse=True)
+        type_of = {L: t for t, L in enumerate(lengths)}
+
+        plan: list = []
+        if lengths:
+            solver = CuttingStock(
+                [L + k for L in lengths],
+                [len(queues[L]) for L in lengths],
+                stocks,
+                self.scrap_threshold,
+            )
+            seeds = []
+            fitting = [p for p in pieces if p.length <= max_len + EPS]
+            for strategy_idx in range(min(self.max_strategies, 6)):
+                legacy, _ = self._calculate_cuts(
+                    self._sort_pieces(fitting, strategy_idx),
+                    self._sort_bars(list(usable_bars), strategy_idx),
+                )
+                pats = []
+                for b in legacy:
+                    pat = [0] * len(lengths)
+                    for c in b.cuts:
+                        pat[type_of[c]] += 1
+                    pats.append(tuple(pat))
+                seeds.append(pats)
+            plan, _ = solver.solve(seeds)
+            self.last_lower_bound = solver.lower_bound
+            self.last_proven_optimal = solver.proven_optimal  # over-length pieces aside
+
+        result_bars: list[BarResult] = []
+        for j, pat in plan:
+            sb = stock_bars[j]
+            bar = BarResult(
+                original_length=sb.length,
+                mark=sb.mark,
+                material=sb.material,
+                source=sb.source,
+                priority=sb.priority,
+                end_trim=self._trim(sb),
+            )
+            for t, a in enumerate(pat):
+                for _ in range(a):
+                    piece = pieces[queues[lengths[t]].popleft()]
+                    bar.cuts.append(piece.length)
+                    bar.cut_marks.append(piece.mark)
+            bar.kerf_used = k * (len(bar.cuts) - 1)
+            result_bars.append(bar)
+        result_bars.sort(key=lambda b: b.free_length)
+
+        unfit = [pieces[i] for i in sorted(oversize + [i for q in queues.values() for i in q])]
+
+        total_stock = sum(b.original_length for b in result_bars)
+        total_waste = sum(b.free_length + b.end_trim for b in result_bars)
+        scrap_waste = sum(
+            b.free_length for b in result_bars
+            if b.free_length <= self.scrap_threshold
+        )
+        if total_stock > 0:
+            waste_pct = total_waste / total_stock * 100.0
+            scrap_pct = scrap_waste / total_stock * 100.0
+        else:
+            waste_pct = 100.0 if unfit else 0.0
+            scrap_pct = 0.0
 
         return ProfileResult(
             profile="",
-            bars=best.bars,
-            waste_pct=best.waste_pct,
-            scrap_pct=best.scrap_pct,
-            unfit_pieces=best.unfit,
+            bars=result_bars,
+            waste_pct=waste_pct,
+            scrap_pct=scrap_pct,
+            unfit_pieces=unfit,
         )
 
-    # ── Sorting strategies ───────────────────────────────────
+    @staticmethod
+    def _cost(bar: StockBar) -> float:
+        """Purchase cost: client stock is already in the yard."""
+        return 0.0 if bar.source == CLIENT_SOURCE else bar.length
+
+    def _trim(self, bar: StockBar) -> float:
+        """Client offcuts were cut in the shop; only factory ends are uneven."""
+        if bar.source == CLIENT_SOURCE or bar.length <= self.end_trim:
+            return 0.0
+        return self.end_trim
+
+    # ── Legacy FFD (seed candidates) ─────────────────────────
 
     @staticmethod
     def _sort_pieces(pieces: list[CutPiece], strategy: int) -> list[CutPiece]:
@@ -164,6 +238,7 @@ class NestEngine:
         available = list(available)  # work on a copy
         result_bars: list[BarResult] = []
         unfit_pieces: list[CutPiece] = []
+        free: list[float] = []  # free length per result bar (kept in step)
 
         for piece in pieces:
             # Fitting onto an already-opened bar means a fresh cut after
@@ -172,14 +247,16 @@ class NestEngine:
             # is tracked separately) so exports show the real cut length.
             needed_with_kerf = piece.length + self.kerf_width
 
-            fit_bar = next(
-                (b for b in result_bars if b.free_length >= needed_with_kerf),
+            fit = next(
+                (i for i, f in enumerate(free) if f >= needed_with_kerf),
                 None,
             )
-            if fit_bar is not None:
+            if fit is not None:
+                fit_bar = result_bars[fit]
                 fit_bar.cuts.append(piece.length)
                 fit_bar.cut_marks.append(piece.mark)
                 fit_bar.kerf_used += self.kerf_width
+                free[fit] -= needed_with_kerf
                 continue
 
             # Opening a new bar: the very first cut has no preceding cut,
@@ -198,6 +275,7 @@ class NestEngine:
                     new_bar.cuts.append(piece.length)
                     new_bar.cut_marks.append(piece.mark)
                     result_bars.append(new_bar)
+                    free.append(new_stock.length - piece.length)
                     placed = True
                     break
 
@@ -257,14 +335,3 @@ class NestError(Exception):
 
     Messages always describe what's wrong, where, and what's expected.
     """
-
-
-@dataclass
-class _Solution:
-    """Internal: one candidate solution from a single strategy."""
-
-    bars: list[BarResult]
-    waste_pct: float
-    scrap_pct: float
-    last_remnant: float
-    unfit: list[CutPiece] = field(default_factory=list)

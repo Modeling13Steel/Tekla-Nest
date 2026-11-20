@@ -26,6 +26,7 @@ dev = [
     "pytest-qt>=4",
     "pytest-cov>=5",
     "ruff>=0.6",
+    "scipy>=1.13.1",
 ]
 
 [tool.uv]
@@ -41,8 +42,11 @@ build-backend = "hatchling.build"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# Heavy nesting eval is opt-in: uv run pytest tests/eval -m eval_slow
+addopts = "-m 'not eval_slow'"
 markers = [
     "windows_only: marks tests that require Windows",
+    "eval_slow: heavy nesting eval (full-size projects, MILP); excluded by default",
 ]
 
 [tool.ruff]

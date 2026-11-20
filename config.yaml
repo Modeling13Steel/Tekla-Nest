@@ -2,7 +2,6 @@ app:
   title: "M13S Nest"
   logo: "resources/logo_outline.png"
   icon: "resources/logo_cut_bar_mark.ico"
-  version: "2.0.0"
   language: "pt"
 
 theme:
@@ -24,6 +23,7 @@ nesting:
   kerf_width: 0
   scrap_threshold: 2000
   max_strategies: 6
+  end_trim: 100        # mm reserved per factory bar when "spare end" is ticked
 
 stock_defaults:
   hot_rolled_profiles:

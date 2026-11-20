@@ -95,6 +95,7 @@ dialogs:
     close_guard_text: "Optimization results have not been exported. Export before closing?"
     configuration_error_title: Configuration Error
     license_issue_title: License Issue
+    app_already_running: "The application is already running."
     export_title: Export
     pdf_saved: "PDF saved to:\n{path}"
     excel_saved: "Excel saved to:\n{path}"
@@ -105,6 +106,7 @@ dialogs:
     title: Choose profiles to export
     prompt: "Pick which (profile · material) groups to include:"
     empty_warn: "Select at least one profile to export."
+    purchase_only: "Purchase list only (market bars, supplier format)"
   milestone:
     title: Milestone
     label: "Milestone / revision label (leave blank to omit):"
@@ -336,6 +338,7 @@ report:
     scrap_pct: Scrap %
     total: TOTAL
     purchase_sheet: Purchase
+    order_title: Purchase list
     linear_meters: Linear m
     site_image_sheet: Site Image
   prep:
@@ -512,6 +515,8 @@ tables:
     tabs_description: Market and client stock tables
     market_tab: Market
     client_tab: Client
+    end_trim: "Spare {mm} mm / bar"
+    end_trim_tip: "Reserve {mm} mm on every factory bar in case its end is not cut square. Client offcuts are not trimmed. Purchase lengths stay the same."
     table_accessible_name: "{title} table"
     headers:
       quantity: Quant.

@@ -94,67 +94,21 @@ def prompt_load_image(parent: QWidget) -> str:
 
 
 def _ask_scope_and_milestone(
-    parent: QWidget, presenter
-) -> tuple[object, str, bool]:
+    parent: QWidget, presenter, purchase_toggle: bool = False
+) -> tuple[object, str, bool, bool]:
     """Combined scope + milestone dialog for PDF/Excel export.
 
-    Returns ``(scope, milestone, cancelled)``.
+    Returns ``(scope, milestone, cancelled, purchase_only)``.
 
-    When ≥ 2 profiles are available a single dialog shows profile
-    checkboxes *and* the milestone text field.  When there is only one
-    profile the scope is trivially "all", so only a milestone
-    ``QInputDialog`` is shown.
+    Profile checkboxes appear when >= 2 profiles are available;
+    ``purchase_toggle`` adds the "purchase list only" tickbox (Excel).
+    With one profile and no tickbox, only a milestone ``QInputDialog``
+    is shown.
     """
     result = getattr(presenter, "_last_result", None)
     keys = available_scope_keys(result) if result is not None else []
 
-    if len(keys) >= 2:
-        dlg = QDialog(parent)
-        dlg.setWindowTitle(tr("dialogs.export_scope.title"))
-        layout = QVBoxLayout(dlg)
-        layout.addWidget(QLabel(tr("dialogs.export_scope.prompt")))
-        boxes: list[tuple[QCheckBox, tuple[str, str]]] = []
-        for prof, mat in keys:
-            cb_label = f"{prof}" + (f" · {mat}" if mat else "")
-            cb = QCheckBox(cb_label, dlg)
-            cb.setChecked(True)
-            layout.addWidget(cb)
-            boxes.append((cb, (prof, mat)))
-
-        layout.addWidget(QLabel(""))  # visual spacer
-        layout.addWidget(QLabel(tr("dialogs.milestone.label")))
-        milestone_edit = QLineEdit(presenter.milestone, dlg)
-        layout.addWidget(milestone_edit)
-
-        bb = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel,
-            parent=dlg,
-        )
-        bb.accepted.connect(dlg.accept)
-        bb.rejected.connect(dlg.reject)
-        layout.addWidget(bb)
-
-        if dlg.exec() != QDialog.DialogCode.Accepted:
-            return None, "", True
-
-        selected = [(p, m) for cb, (p, m) in boxes if cb.isChecked()]
-        if not selected:
-            QMessageBox.warning(
-                parent,
-                tr("dialogs.export_scope.title"),
-                tr("dialogs.export_scope.empty_warn"),
-            )
-            return None, "", True
-
-        milestone = milestone_edit.text()
-        scope = (
-            None
-            if len(selected) == len(keys)
-            else frozenset((p.strip().lower(), m.strip().lower()) for p, m in selected)
-        )
-        return scope, milestone, False
-
-    else:
+    if len(keys) < 2 and not purchase_toggle:
         milestone, ok = QInputDialog.getText(
             parent,
             tr("dialogs.milestone.title"),
@@ -162,13 +116,63 @@ def _ask_scope_and_milestone(
             text=presenter.milestone,
         )
         if not ok:
-            return None, "", True
-        return None, milestone, False
+            return None, "", True, False
+        return None, milestone, False, False
+
+    dlg = QDialog(parent)
+    dlg.setWindowTitle(tr("dialogs.export_scope.title"))
+    layout = QVBoxLayout(dlg)
+    boxes: list[tuple[QCheckBox, tuple[str, str]]] = []
+    if len(keys) >= 2:
+        layout.addWidget(QLabel(tr("dialogs.export_scope.prompt")))
+        for prof, mat in keys:
+            cb_label = f"{prof}" + (f" · {mat}" if mat else "")
+            cb = QCheckBox(cb_label, dlg)
+            cb.setChecked(True)
+            layout.addWidget(cb)
+            boxes.append((cb, (prof, mat)))
+        layout.addWidget(QLabel(""))  # visual spacer
+
+    layout.addWidget(QLabel(tr("dialogs.milestone.label")))
+    milestone_edit = QLineEdit(presenter.milestone, dlg)
+    layout.addWidget(milestone_edit)
+
+    purchase_cb = None
+    if purchase_toggle:
+        purchase_cb = QCheckBox(tr("dialogs.export_scope.purchase_only"), dlg)
+        purchase_cb.setObjectName("purchaseOnlyCheck")
+        layout.addWidget(purchase_cb)
+
+    bb = QDialogButtonBox(
+        QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel,
+        parent=dlg,
+    )
+    bb.accepted.connect(dlg.accept)
+    bb.rejected.connect(dlg.reject)
+    layout.addWidget(bb)
+
+    if dlg.exec() != QDialog.DialogCode.Accepted:
+        return None, "", True, False
+
+    scope = None
+    if boxes:
+        selected = [(p, m) for cb, (p, m) in boxes if cb.isChecked()]
+        if not selected:
+            QMessageBox.warning(
+                parent,
+                tr("dialogs.export_scope.title"),
+                tr("dialogs.export_scope.empty_warn"),
+            )
+            return None, "", True, False
+        if len(selected) != len(keys):
+            scope = frozenset((p.strip().lower(), m.strip().lower()) for p, m in selected)
+    purchase_only = purchase_cb is not None and purchase_cb.isChecked()
+    return scope, milestone_edit.text(), False, purchase_only
 
 
 def prompt_export_pdf(parent: QWidget, presenter) -> str:
     """Return the saved path on success or empty string otherwise."""
-    scope, milestone, cancelled = _ask_scope_and_milestone(parent, presenter)
+    scope, milestone, cancelled, _ = _ask_scope_and_milestone(parent, presenter)
     if cancelled:
         return ""
     presenter.milestone = milestone
@@ -185,14 +189,16 @@ def prompt_export_pdf(parent: QWidget, presenter) -> str:
 
 
 def prompt_export_excel(parent: QWidget, presenter) -> str:
-    scope, milestone, cancelled = _ask_scope_and_milestone(parent, presenter)
+    scope, milestone, cancelled, purchase_only = _ask_scope_and_milestone(
+        parent, presenter, purchase_toggle=True
+    )
     if cancelled:
         return ""
     presenter.milestone = milestone
     path, _ = QFileDialog.getSaveFileName(
         parent, tr("dialogs.files.export_excel"), "", tr("dialogs.files.excel_filter")
     )
-    if not path or not presenter.export_excel(path, scope=scope):
+    if not path or not presenter.export_excel(path, scope=scope, purchase_only=purchase_only):
         return ""
     QMessageBox.information(
         parent, tr("dialogs.messages.export_title"),

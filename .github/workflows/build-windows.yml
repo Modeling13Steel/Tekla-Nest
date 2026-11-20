@@ -92,11 +92,20 @@ jobs:
         run: Get-ChildItem -Recurse -Path dist | Format-List FullName
         shell: pwsh
 
+      - name: Read app version from pyproject.toml
+        shell: pwsh
+        run: |
+          $version = uv run python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])"
+          if (-not $version) { Write-Error "Could not read version from pyproject.toml"; exit 1 }
+          "APP_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
       - name: Build customer installer
-        run: iscc installer.iss
+        shell: pwsh
+        run: iscc "/DMyAppVersion=$env:APP_VERSION" installer.iss
 
       - name: Build admin installer
-        run: iscc installer-admin.iss
+        shell: pwsh
+        run: iscc "/DMyAppVersion=$env:APP_VERSION" installer-admin.iss
 
       - name: Package license-server infrastructure separately
         shell: pwsh

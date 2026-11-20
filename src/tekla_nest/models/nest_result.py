@@ -32,7 +32,7 @@ class ProfileResult:
 
     @property
     def total_waste(self) -> float:
-        return sum(b.free_length for b in self.bars)
+        return sum(b.free_length + b.end_trim for b in self.bars)
 
     @property
     def utilization_pct(self) -> float:

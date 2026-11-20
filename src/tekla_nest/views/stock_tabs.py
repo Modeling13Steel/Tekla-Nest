@@ -4,8 +4,9 @@ Replaces: C# tabControlStock with dataGridView2 (Market) + dataGridView3 (Client
 """
 from __future__ import annotations
 
-from PySide6.QtWidgets import QTabWidget
+from PySide6.QtWidgets import QCheckBox, QTabWidget
 
+from ..config.app_config import get_config
 from ..design_system import set_accessibility
 from ..i18n import tr
 from ..models import StockEntry
@@ -22,6 +23,20 @@ class StockTabsWidget(QTabWidget):
         self._client = StockTableWidget(tr("tables.stock.client_title"))
         self.addTab(self._market, tr("tables.stock.market_tab"))
         self.addTab(self._client, tr("tables.stock.client_tab"))
+        # Market tab only: the trim applies to factory bars, not client offcuts.
+        self._end_trim = QCheckBox(self._market)
+        self._end_trim.setObjectName("endTrimCheck")
+        self._end_trim.setContentsMargins(8, 6, 8, 0)
+        self._market.layout().insertWidget(0, self._end_trim)
+        self._retranslate_trim()
+
+    def end_trim_enabled(self) -> bool:
+        return self._end_trim.isChecked()
+
+    def _retranslate_trim(self) -> None:
+        mm = f"{get_config().end_trim:g}"
+        self._end_trim.setText(tr("tables.stock.end_trim", mm=mm))
+        self._end_trim.setToolTip(tr("tables.stock.end_trim_tip", mm=mm))
 
     def add_stock(self, entries: list[StockEntry]) -> None:
         """Route each entry to the correct tab based on source."""
@@ -55,3 +70,4 @@ class StockTabsWidget(QTabWidget):
         self.setTabText(1, tr("tables.stock.client_tab"))
         self._market.retranslate(tr("tables.stock.market_title"))
         self._client.retranslate(tr("tables.stock.client_title"))
+        self._retranslate_trim()

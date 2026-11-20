@@ -237,6 +237,7 @@ class NestWindow(QMainWindow):
         with contextlib.suppress(Exception):
             self._pres.set_market_stock(self._stock_tabs.get_market_stock())
             self._pres.set_client_stock(self._stock_tabs.get_client_stock())
+        self._pres.set_end_trim(self._stock_tabs.end_trim_enabled())
 
     def _on_auto_stock(self) -> None:
         """Sync parts edits, then ask the presenter to seed default stock."""

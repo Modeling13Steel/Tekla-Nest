@@ -95,6 +95,7 @@ dialogs:
     close_guard_text: "Os resultados da otimização ainda não foram exportados. Exportar antes de fechar?"
     configuration_error_title: Erro de configuração
     license_issue_title: Problema de licença
+    app_already_running: "A aplicação já está em execução."
     export_title: Exportação
     pdf_saved: "PDF guardado em:\n{path}"
     excel_saved: "Excel guardado em:\n{path}"
@@ -105,6 +106,7 @@ dialogs:
     title: Escolher perfis a exportar
     prompt: "Selecione os grupos (perfil · material) a incluir:"
     empty_warn: "Selecione pelo menos um perfil para exportar."
+    purchase_only: "Apenas lista de compra (barras de mercado, formato fornecedor)"
   milestone:
     title: Marco
     label: "Marco / revisão (deixe em branco para omitir):"
@@ -336,6 +338,7 @@ report:
     scrap_pct: Sobra %
     total: TOTAL
     purchase_sheet: Compras
+    order_title: Lista de compra
     linear_meters: Metros lineares
     site_image_sheet: Imagem do Local
   prep:
@@ -512,6 +515,8 @@ tables:
     tabs_description: Tabelas de stock de mercado e cliente
     market_tab: Mercado
     client_tab: Cliente
+    end_trim: "Reservar {mm} mm / barra"
+    end_trim_tip: "Reservar {mm} mm em cada barra de fábrica caso o topo não venha bem cortado. As sobras do cliente não são aparadas. Os comprimentos de compra mantêm-se."
     table_accessible_name: "Tabela {title}"
     headers:
       quantity: Quant.
